@@ -12,5 +12,5 @@ import javax.persistence.Table
 @Table(name = "answer_submission", schema = "questionengine")
 class AnswerSubmission(@Id @GeneratedValue var id: Long? = null,
                        @OneToOne @JoinColumn var question: Question,
-                       @ManyToOne @JoinColumn var user: User, var answer: String) {
-}
+                       @ManyToOne @JoinColumn var user: User, var answer: String)
+{}

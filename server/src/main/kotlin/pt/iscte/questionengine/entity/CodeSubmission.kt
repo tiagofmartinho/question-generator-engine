@@ -13,5 +13,4 @@ import javax.persistence.Table
 class CodeSubmission(@Id @GeneratedValue var id: Long? = null,
                      @ManyToOne @JoinColumn var user: User, var content: String,
                      @OneToMany(mappedBy = "codeSubmission") var questions: MutableCollection<Question>?)
-{
-}
+{}

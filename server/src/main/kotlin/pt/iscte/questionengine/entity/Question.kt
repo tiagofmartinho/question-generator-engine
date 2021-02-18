@@ -16,5 +16,5 @@ class Question(@Id @GeneratedValue var id: Long? = null,
                @ManyToOne @JoinColumn var codeSubmission: CodeSubmission,
                @OneToOne var answerSubmission: AnswerSubmission?,
                var question: String,
-               var correctAnswer: String) {
-}
+               var correctAnswer: String)
+{}

@@ -13,5 +13,5 @@ import javax.persistence.Table
 @Table(name = "question_template", schema = "questionengine")
 class QuestionTemplate(@Id @GeneratedValue var id: Long? = null, @Column(unique=true) var clazz: String,
                        @Enumerated(EnumType.STRING)var type: QuestionType,
-                       @OneToMany(mappedBy = "questionTemplate") var questions: MutableCollection<Question>?) {
-}
+                       @OneToMany(mappedBy = "questionTemplate") var questions: MutableCollection<Question>?)
+{}

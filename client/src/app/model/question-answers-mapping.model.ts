@@ -1,5 +1,3 @@
-import { Question } from "./question.model";
-
 export class QuestionAnswersMapping {
     questionId?: number;
     question?: string;

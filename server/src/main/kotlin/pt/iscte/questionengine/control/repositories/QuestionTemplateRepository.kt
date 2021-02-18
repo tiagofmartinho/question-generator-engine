@@ -6,4 +6,5 @@ import pt.iscte.questionengine.entity.QuestionTemplate
 interface QuestionTemplateRepository : JpaRepository<QuestionTemplate?, Long> {
 
     fun findQuestionTemplateByClazz(clazz: String): QuestionTemplate?
+
 }
