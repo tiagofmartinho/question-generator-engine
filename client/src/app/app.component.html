@@ -15,36 +15,54 @@
 
     <br>
 
-    <form class="code-submission-form">
 
-        <mat-form-field class="example-full-width">
-            <mat-label>Paste your code here (make sure it has no errors!)</mat-label>
-            <textarea [disabled]="phase !== 1" matInput rows="5" [(ngModel)]="code" name="code" placeholder="public class SomeClass { ... }"></textarea>
-        </mat-form-field>
-    
-        <br>
-
-        <button mat-raised-button color="primary" *ngIf="phase === 1" (click)="submitCode()">Submit Code</button>
-    
-    </form>
-    
+  <div class="col text-center" *ngIf="phase === 0">
+    <br>
+    <button mat-raised-button color="primary" (click)="login()">SIGN IN WITH GOOGLE</button>
     <br>
     <br>
+    <i style="font-size: 12px">Use your university email if possible.<br>
+      Only your email and name are used for statistic purposes. They won't be disclosed without your permission.</i>
+  </div>
+
+  <br>
+
+  <form class="code-submission-form" *ngIf="phase !== 0">
+    <label for="editor">Paste your code here (make sure it has no errors!)</label>
+    <ngx-codemirror
+      id="editor"
+      required
+      [disabled]="phase !== 1"
+      [(ngModel)]="code"
+      name="code"
+      [options]="{
+              lineNumbers: true,
+              theme: 'default',
+              mode: 'text/x-java'
+              }"
+    ></ngx-codemirror>
+    <br>
+    <div class="col text-center">
+    <button mat-raised-button color="primary" [disabled]="code == null || code === ''" *ngIf="phase === 1 && !loading" (click)="submitCode()">SUBMIT CODE</button>
+    </div>
+  </form>
 
     <div *ngIf="loading" style="margin:auto; width: 10%;">
         <mat-spinner [diameter]="50" ></mat-spinner>
     </div>
 
-    <form class="answer-submission-form" *ngIf="phase === 2 && !loading">
+    <form class="answer-submission-form" *ngIf="phase === 2 && !loading" #answerSubmissionForm="ngForm">
         <h3>Answer the following questions about your code</h3>
         <div *ngFor="let qa of interaction?.qas; let index = index; trackBy: trackByIndex">
             <mat-form-field class="example-full-width">
-                <mat-label>{{ qa.question }}</mat-label>
-                <input matInput name="answer{{index}}" [(ngModel)]="qa.userAnswer">
+                <mat-label>{{ qa.question.question }}</mat-label>
+                <input matInput name="answer{{index}}" required [(ngModel)]="qa.userAnswer">
               </mat-form-field>
         </div>
         <br>
-          <button mat-raised-button color="primary" (click)="submitAnswers()">Submit Answers</button>
+      <div class="col text-center">
+          <button mat-raised-button color="primary" [disabled]="!answerSubmissionForm.valid" (click)="submitAnswers()">SUBMIT ANSWERS</button>
+        </div>
     </form>
 
     <form class="evaluation-form" *ngIf="phase === 3 && !loading">
@@ -55,7 +73,7 @@
           <br>
 
           <div class="col text-center">
-            <button mat-raised-button color="primary" (click)="cleanup()">Submit new code</button>
+            <button mat-raised-button color="primary" (click)="cleanup()">SUBMIT NEW CODE</button>
           </div>
     </form>
 

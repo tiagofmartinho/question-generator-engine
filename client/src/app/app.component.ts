@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { AppService } from './app.service';
 import { Interaction } from './model/interaction.model';
 import { QuestionAnswersMapping } from './model/question-answers-mapping.model';
-import { Question } from './model/question.model';
+import {GoogleLoginProvider, SocialAuthService} from 'angularx-social-login';
+import {User} from './model/user.model';
+import 'codemirror/mode/clike/clike';
+import {Question} from './model/question.model';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -12,29 +16,60 @@ import { Question } from './model/question.model';
 })
 export class AppComponent {
   interaction = new Interaction([]);
-  feedback: string[] = []
-  phase = 1;
+  feedback: string[] = [];
+  phase = 0;
   loading = false;
   allAnswersCorrect = true;
-  code = "";
+  user: User;
+  code: string;
 
-  constructor(private service: AppService, private toastr: ToastrService){}
+  constructor(private service: AppService, private toastr: ToastrService, private authService: SocialAuthService){}
+
+  login() {
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then(user => {
+      this.user = new User(user.firstName, user.lastName, user.email);
+      console.log(this.user);
+      this.phase = 1;
+    });
+  }
 
   submitCode() {
     this.loading = true;
-    return this.service.submitCode(this.code)
+    return this.service.submitCode(this.code, this.user)
     .toPromise().then(
       (data) => {
-        this.code = data?.formattedCode;
-        this.interaction.userId = data?.userId; //TODO remove
-        data?.questions.forEach(q => this.interaction.qas.push(new QuestionAnswersMapping(q.questionId, q.question)))
-        this.phase = 2;
+        console.log(data);
+        this.user.userId = data?.userId;
+        this.interaction.userId = data?.userId;
+        this.mapQuestionsToModel(data?.questions)
         this.loading = false;
       }, (error) => {
-        console.log(error);
-        this.toastr.error("Your code has errors. Please submit syntatically correct code.");
+        this.handleError(error);
         this.loading = false;
-      })
+      });
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    console.log(error);
+    if (error.status === 400) {
+      if (error.error.message === 'invalid_code') {
+        this.toastr.error('Your code has errors. Please submit syntactically correct code.');
+      }
+      else {
+        this.toastr.error('Invalid submission. Please fill all necessary inputs.')
+      }
+    } else if (error.status === 500) {
+      this.toastr.error('Server is not available at the moment or there was an error processing your request. Try again later.')
+    }
+  }
+
+  private mapQuestionsToModel(questions: Question[]) {
+    if (questions?.length > 0) {
+      questions.forEach(q => this.interaction.qas.push(new QuestionAnswersMapping(new Question(q.questionId, q.question))));
+      this.phase = 2;
+    } else {
+      this.toastr.error('No questions were generated for the code submitted. Add at least one method to your code.')
+    }
   }
 
   submitAnswers() {
@@ -47,49 +82,48 @@ export class AppComponent {
       this.phase = 3;
       this.loading = false;
     }, (error) => {
-      console.log(error);
-      this.toastr.error("Please submit non-empty answers to all the questions.")
+      this.handleError(error);
       this.loading = false;
-    })
+    });
   }
 
   private mapCorrectAnswersToInteractionModel(data: Map<number, string>) {
-    for (const [questionId, corectAnswer] of Object.entries(data)) {
-      this.interaction.qas.forEach(qa => { 
-        if (qa.questionId.toString() == questionId) {
-          qa.correctAnswer = corectAnswer;
-          this.checkAnswer(qa) 
+    for (const [questionId, correctAnswer] of Object.entries(data)) {
+      this.interaction.qas.forEach(qa => {
+        if (qa.question.questionId.toString() === questionId) {
+          qa.correctAnswer = correctAnswer;
+          this.checkAnswer(qa);
         }
-      })
+      });
     }
   }
 
   private checkAnswer(qa: QuestionAnswersMapping) {
-    if (qa.correctAnswer == qa.userAnswer) {
+    if (qa.correctAnswer === qa.userAnswer) {
       this.feedback.push(
-        `For the question \"${qa.question}\" you answered CORRECTLY with \"${qa.userAnswer}\"`        
-      )
+        `For the question \"${qa.question.question}\" you answered CORRECTLY with \"${qa.userAnswer}\"`
+      );
     } else {
       this.allAnswersCorrect = false;
       this.feedback.push(
-        `For the question \"${qa.question}\" you answered INCORRECTLY with: \"${qa.userAnswer}\" and the correct answer is \"${qa.correctAnswer}\"`  
+        `For the question \"${qa.question.question}\" you answered INCORRECTLY with: \"${qa.userAnswer}\" and the correct answer is \"${qa.correctAnswer}\"`
       );
     }
   }
 
   private showResultsToast() {
     if (this.allAnswersCorrect) {
-      this.toastr.success("All questions were answered correctly!")
+      this.toastr.success('All questions were answered correctly!');
     } else {
-      this.toastr.error("You answered incorrectly to at least one question.")
+      this.toastr.error('You answered incorrectly to at least one question.');
     }
   }
 
   cleanup() {
     this.phase = 1;
-    this.feedback = []
+    this.feedback = [];
     this.allAnswersCorrect = true;
-    this.code = "";
+    this.code = '';
     this.interaction = new Interaction([]);
   }
 }

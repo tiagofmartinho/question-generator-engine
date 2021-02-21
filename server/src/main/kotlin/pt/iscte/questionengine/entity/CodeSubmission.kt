@@ -9,7 +9,7 @@ import javax.persistence.OneToMany
 import javax.persistence.Table
 
 @Entity
-@Table(name = "code_submission", schema = "questionengine")
+@Table(name = "code_submission", schema = "question_engine")
 class CodeSubmission(@Id @GeneratedValue var id: Long? = null,
                      @ManyToOne @JoinColumn var user: User, var content: String,
                      @OneToMany(mappedBy = "codeSubmission") var questions: MutableCollection<Question>?)

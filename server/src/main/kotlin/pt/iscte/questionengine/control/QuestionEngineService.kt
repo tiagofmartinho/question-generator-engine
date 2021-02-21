@@ -6,7 +6,6 @@ import pt.iscte.questionengine.control.repositories.UserRepository
 import pt.iscte.questionengine.control.utils.PaddleUtils
 import pt.iscte.questionengine.entity.User
 import pt.iscte.questionengine.model.CodeSubmissionResponse
-import com.google.googlejavaformat.java.Formatter
 import pt.iscte.paddle.model.IProcedure
 import pt.iscte.questionengine.control.repositories.AnswerSubmissionRepository
 import pt.iscte.questionengine.control.repositories.CodeSubmissionRepository
@@ -18,7 +17,9 @@ import pt.iscte.questionengine.entity.Question
 import pt.iscte.questionengine.entity.QuestionTemplate
 import pt.iscte.questionengine.entity.QuestionType
 import pt.iscte.questionengine.model.AnswerInteraction
+import pt.iscte.questionengine.model.CodeSubmissionModel
 import pt.iscte.questionengine.model.QuestionModel
+import pt.iscte.questionengine.model.UserModel
 import kotlin.streams.toList
 
 @Service
@@ -33,23 +34,22 @@ class QuestionEngineService(private val userRepository: UserRepository,
         WhichFixedValueVariables(), WhichFunctions(), WhichParams(), WhichVariableHoldsReturn(), WhichVariables()
     )
 
-    fun generateQuestions(code: String, userId: Long?): CodeSubmissionResponse {
-        val formattedCode = Formatter().formatSource(code)
-        val user = saveUser(userId)
-        val codeSubmission = saveCodeSubmission(formattedCode, user)
-        val questions = generateQuestions(codeSubmission)
+    fun getQuestions(codeSubmissionModel: CodeSubmissionModel): CodeSubmissionResponse {
+        val user = getUser(codeSubmissionModel.user)
+        val codeSubmission = saveCodeSubmission(codeSubmissionModel.code, user)
+        val questions = getQuestions(codeSubmission)
         val questionModels = questions.stream().map { QuestionModel(it.id, it.question) }.toList()
-        return CodeSubmissionResponse(formattedCode, questionModels, user.id)
+        return CodeSubmissionResponse(questionModels, user.id)
     }
 
     fun getCorrectAnswers(answerInteraction: AnswerInteraction): Map<Long, String> {
-        val questions = questionRepository.findAllById(answerInteraction.questionsAnswers.stream().map { it.questionId }.toList())
+        val questions = questionRepository.findAllById(answerInteraction.questionsAnswers.stream().map { it.question.questionId }.toList())
         val user = userRepository.findById(answerInteraction.userId).get()
         val questionCorrectAnswerMap = mutableMapOf<Long, String>()
         for (qa in answerInteraction.questionsAnswers) {
             for (q in questions) {
-                if (qa.questionId == q.id) {
-                    questionCorrectAnswerMap[qa.questionId] = q.correctAnswer
+                if (qa.question.questionId != null && qa.question.questionId == q.id) {
+                    questionCorrectAnswerMap[qa.question.questionId] = q.correctAnswer
                     val savedAnswer = answerSubmissionRepository.save(AnswerSubmission(null, q, user, qa.userAnswer))
                     q.answerSubmission = savedAnswer
                     questionRepository.save(q)
@@ -61,16 +61,16 @@ class QuestionEngineService(private val userRepository: UserRepository,
         return questionCorrectAnswerMap
     }
 
-    private fun saveUser(userId: Long?): User {
-        if (userId == null) { return userRepository.save(User())}
-        return userRepository.findById(userId).get()
+    private fun getUser(userModel: UserModel): User {
+        return userRepository.findUserByEmail(userModel.email)
+            ?: return userRepository.save(User(userModel.firstName, userModel.lastName, userModel.email))
     }
 
     private fun saveCodeSubmission(code: String, user: User): CodeSubmission {
         return codeSubmissionRepository.save(CodeSubmission(null, user, code, null))
     }
 
-    private fun generateQuestions(codeSubmission: CodeSubmission): Collection<Question> {
+    private fun getQuestions(codeSubmission: CodeSubmission): Collection<Question> {
         val module = PaddleUtils.loadCode(codeSubmission.content)
         val questions = mutableSetOf<Question>()
         for(procedure in module.procedures) {
@@ -96,3 +96,4 @@ class QuestionEngineService(private val userRepository: UserRepository,
         return questions
     }
 }
+

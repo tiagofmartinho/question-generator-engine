@@ -9,7 +9,7 @@ import javax.persistence.OneToOne
 import javax.persistence.Table
 
 @Entity
-@Table(name = "answer_submission", schema = "questionengine")
+@Table(name = "answer_submission", schema = "question_engine")
 class AnswerSubmission(@Id @GeneratedValue var id: Long? = null,
                        @OneToOne @JoinColumn var question: Question,
                        @ManyToOne @JoinColumn var user: User, var answer: String)

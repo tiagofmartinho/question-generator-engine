@@ -1,7 +1,7 @@
 import { QuestionAnswersMapping } from "./question-answers-mapping.model";
 
 export class Interaction {
-    userId?: number; //TODO uuid
+    userId?: number;
     qas?: QuestionAnswersMapping[];
 
     constructor(qas?: QuestionAnswersMapping[], userId?: number) {

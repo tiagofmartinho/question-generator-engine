@@ -15,6 +15,14 @@ import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { AppService } from './app.service';
 
+import {CodemirrorModule} from '@ctrl/ngx-codemirror';
+
+import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-login';
+import {
+  GoogleLoginProvider,
+} from 'angularx-social-login';
+
+
 @NgModule({
   declarations: [
     AppComponent
@@ -29,10 +37,23 @@ import { AppService } from './app.service';
     MatInputModule,
     MatListModule,
     MatProgressSpinnerModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    SocialLoginModule,
+    CodemirrorModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [AppService],
+  providers: [AppService, {
+    provide: 'SocialAuthServiceConfig',
+    useValue: {
+      autoLogin: false,
+      providers: [
+        {
+          id: GoogleLoginProvider.PROVIDER_ID,
+          provider: new GoogleLoginProvider('GOOGLE_CLIENT_ID')
+        }
+      ]
+    } as SocialAuthServiceConfig,
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
