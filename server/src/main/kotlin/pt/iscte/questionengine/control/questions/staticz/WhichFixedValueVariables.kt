@@ -5,11 +5,11 @@ import pt.iscte.paddle.model.IProcedure
 import pt.iscte.paddle.model.IVariableAssignment
 import pt.iscte.paddle.model.IVariableDeclaration
 
-class WhichFixedValueVariables : StaticQuestion<IProcedure, Set<String>>() {
+class WhichFixedValueVariables : StaticQuestion<IProcedure, Collection<String>>() {
 
     override fun question(target: IProcedure) = "What are the fixed value variables?"
     override fun applicableTo(target: IProcedure) = HowManyVariables().answer(target) > 0
-    override fun answer(target: IProcedure): Set<String> {
+    override fun answer(target: IProcedure): Collection<String> {
         val v = FindVariables()
         target.accept(v)
         val group = v.assignedVariables.groupingBy { it.target.id }.eachCount().filter { it.value == 1 }.toMutableMap()
@@ -29,7 +29,7 @@ class WhichFixedValueVariables : StaticQuestion<IProcedure, Set<String>>() {
      * Parameters can be reassigned one or more times so they can't be part of the result in this case
      * If they aren't present in the map it means they are a fixed variable, in which case they have to be added to the result
      */
-    private fun getFixedValueVariables(map: Map<String, Int>, parameters: MutableList<IVariableDeclaration>): Set<String> {
+    private fun getFixedValueVariables(map: Map<String, Int>, parameters: MutableList<IVariableDeclaration>): Collection<String> {
         val result = map.keys.toMutableSet()
         for (param in parameters) {
             if (!map.contains(param.id)) {

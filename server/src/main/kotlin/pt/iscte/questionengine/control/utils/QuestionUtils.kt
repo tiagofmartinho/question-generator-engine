@@ -1,11 +1,13 @@
 package pt.iscte.questionengine.control.utils
 
 import pt.iscte.paddle.model.IProcedure
-import pt.iscte.paddle.model.IProgramElement
 import pt.iscte.paddle.model.IType
 import pt.iscte.paddle.model.IVariableDeclaration
 import pt.iscte.questionengine.control.questions.staticz.*
 import kotlin.random.Random
+import kotlin.reflect.KClass
+import kotlin.reflect.KType
+import kotlin.reflect.full.memberFunctions
 
 class QuestionUtils {
 
@@ -26,6 +28,23 @@ class QuestionUtils {
             val values = mutableListOf<Any>()
             params.forEach { values.add(generateValueForType(it.type)) }
             return values.toTypedArray()
+        }
+
+        fun getReturnTypeOfAnswer(kClass: KClass<out StaticQuestion<IProcedure, out Any>>): String {
+            for (func in kClass.memberFunctions) {
+                if ("answer" == func.name) {
+                    return getSimpleNameOfReturnType(func.returnType)
+                }
+            }
+            return ""
+        }
+
+        // KClassifier has the following format: class package.package.[...].className
+        private fun getSimpleNameOfReturnType(returnType: KType): String {
+            val returnTypeWithPackages = returnType.classifier.toString()
+                .split(' ')[1]
+                .split('.')
+            return returnTypeWithPackages[returnTypeWithPackages.size -1]
         }
 
         fun randomString(length: Int): String {

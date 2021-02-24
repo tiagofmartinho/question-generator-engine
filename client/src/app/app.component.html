@@ -54,10 +54,29 @@
     <form class="answer-submission-form" *ngIf="phase === 2 && !loading" #answerSubmissionForm="ngForm">
         <h3>Answer the following questions about your code</h3>
         <div *ngFor="let qa of interaction?.qas; let index = index; trackBy: trackByIndex">
-            <mat-form-field class="example-full-width">
+          <br>
+            <mat-form-field *ngIf="qa.question.returnType != 'BOOLEAN' && qa.question.returnType != 'COLLECTION'" class="example-full-width">
                 <mat-label>{{ qa.question.question }}</mat-label>
-                <input matInput name="answer{{index}}" required [(ngModel)]="qa.userAnswer">
+                <input type="number" *ngIf="qa.question.returnType != 'STRING'" matInput name="answer{{index}}" required [(ngModel)]="qa.userAnswer">
+                <input type="text" *ngIf="qa.question.returnType == 'STRING'" matInput name="answer{{index}}" required [(ngModel)]="qa.userAnswer">
               </mat-form-field>
+
+            <div *ngIf="qa.question.returnType == 'BOOLEAN'">
+              <label id="radio-label">{{ qa.question.question }}</label>
+              <br>
+              <mat-radio-group required class="radio-group" [(ngModel)]="qa.userAnswer" name="answer{{index}}"
+                               aria-labelledby="radio-label">
+                <mat-radio-button value="true">True</mat-radio-button>
+                <br>
+                <mat-radio-button value="false">False</mat-radio-button>
+              </mat-radio-group>
+            </div>
+
+          <mat-form-field *ngIf="qa.question.returnType == 'COLLECTION'" class="example-full-width">
+            <mat-label>{{ qa.question.question}}</mat-label>
+            <textarea matInput placeholder="Type 1 value per line..." name="answer{{index}}" required [(ngModel)]="qa.userAnswer"></textarea>
+          </mat-form-field>
+
         </div>
         <br>
       <div class="col text-center">

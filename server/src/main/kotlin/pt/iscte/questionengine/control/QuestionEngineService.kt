@@ -11,6 +11,7 @@ import pt.iscte.questionengine.control.repositories.AnswerSubmissionRepository
 import pt.iscte.questionengine.control.repositories.CodeSubmissionRepository
 import pt.iscte.questionengine.control.repositories.QuestionRepository
 import pt.iscte.questionengine.control.repositories.QuestionTemplateRepository
+import pt.iscte.questionengine.control.utils.QuestionUtils
 import pt.iscte.questionengine.entity.AnswerSubmission
 import pt.iscte.questionengine.entity.CodeSubmission
 import pt.iscte.questionengine.entity.Question
@@ -38,7 +39,7 @@ class QuestionEngineService(private val userRepository: UserRepository,
         val user = getUser(codeSubmissionModel.user)
         val codeSubmission = saveCodeSubmission(codeSubmissionModel.code, user)
         val questions = getQuestions(codeSubmission)
-        val questionModels = questions.stream().map { QuestionModel(it.id, it.question) }.toList()
+        val questionModels = questions.stream().map { QuestionModel(it.id, it.question, it.questionTemplate.returnType) }.toList()
         return CodeSubmissionResponse(questionModels, user.id)
     }
 
@@ -85,9 +86,13 @@ class QuestionEngineService(private val userRepository: UserRepository,
         staticQuestions
             .filter { it.applicableTo(procedure) }
             .forEach {
-                var questionTemplate = questionTemplateRepository.findQuestionTemplateByClazz(it::class::simpleName.get().toString())
+                var questionTemplate = questionTemplateRepository
+                    .findQuestionTemplateByClazz(it::class::simpleName.get().toString())
                 if (questionTemplate == null) {
-                    questionTemplate = questionTemplateRepository.save(QuestionTemplate(null, it::class::simpleName.get().toString(), QuestionType.STATIC, null))
+                    val returnType = QuestionUtils.getReturnTypeOfAnswer(it::class)
+                    questionTemplate = questionTemplateRepository
+                        .save(QuestionTemplate(null, it::class::simpleName.get().toString(), QuestionType.STATIC, null,
+                            returnType.toUpperCase()))
                 }
                 val question = questionRepository.save(Question(null, questionTemplate, codeSubmission, null,
                     it.question(procedure), it.answer(procedure).toString()))

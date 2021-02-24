@@ -65,7 +65,7 @@ export class AppComponent {
 
   private mapQuestionsToModel(questions: Question[]) {
     if (questions?.length > 0) {
-      questions.forEach(q => this.interaction.qas.push(new QuestionAnswersMapping(new Question(q.questionId, q.question))));
+      questions.forEach(q => this.interaction.qas.push(new QuestionAnswersMapping(q)));
       this.phase = 2;
     } else {
       this.toastr.error('No questions were generated for the code submitted. Add at least one method to your code.')
@@ -74,6 +74,7 @@ export class AppComponent {
 
   submitAnswers() {
     this.loading = true;
+    AppComponent.convertListStringToProperFormat(this.interaction.qas)
     return this.service.submitAnswers(this.interaction.userId, this.interaction.qas)
     .toPromise().then((data) => {
       console.log(data);
@@ -85,6 +86,14 @@ export class AppComponent {
       this.handleError(error);
       this.loading = false;
     });
+  }
+
+  private static convertListStringToProperFormat(list: QuestionAnswersMapping[]) {
+    list.forEach(qa => {
+      if (qa?.question?.returnType == 'COLLECTION') {
+        qa.userAnswer = "[" + qa?.userAnswer?.split(/[\r\n]+/).toString() + "]"
+      }
+    })
   }
 
   private mapCorrectAnswersToInteractionModel(data: Map<number, string>) {
@@ -99,7 +108,7 @@ export class AppComponent {
   }
 
   private checkAnswer(qa: QuestionAnswersMapping) {
-    if (qa.correctAnswer === qa.userAnswer) {
+    if (qa.correctAnswer == qa.userAnswer) {
       this.feedback.push(
         `For the question \"${qa.question.question}\" you answered CORRECTLY with \"${qa.userAnswer}\"`
       );

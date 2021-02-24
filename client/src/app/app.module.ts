@@ -9,6 +9,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatListModule} from '@angular/material/list';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatRadioModule} from '@angular/material/radio';
 
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -21,6 +22,7 @@ import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-logi
 import {
   GoogleLoginProvider,
 } from 'angularx-social-login';
+
 
 
 @NgModule({
@@ -36,6 +38,7 @@ import {
     MatButtonModule,
     MatInputModule,
     MatListModule,
+    MatRadioModule,
     MatProgressSpinnerModule,
     ToastrModule.forRoot(),
     SocialLoginModule,
