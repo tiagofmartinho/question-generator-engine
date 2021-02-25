@@ -1,12 +1,17 @@
 package pt.iscte.questionengine.control
 
 import org.springframework.stereotype.Service
+import pt.iscte.paddle.interpreter.IMachine
+import pt.iscte.paddle.interpreter.IProgramState
 import pt.iscte.questionengine.control.questions.staticz.*
 import pt.iscte.questionengine.control.repositories.UserRepository
 import pt.iscte.questionengine.control.utils.PaddleUtils
 import pt.iscte.questionengine.entity.User
 import pt.iscte.questionengine.model.CodeSubmissionResponse
 import pt.iscte.paddle.model.IProcedure
+import pt.iscte.questionengine.control.questions.dynamic.HowDeepCallStack
+import pt.iscte.questionengine.control.questions.dynamic.HowManyMethodsCalled
+import pt.iscte.questionengine.control.questions.dynamic.WhatIsTheReturnValue
 import pt.iscte.questionengine.control.repositories.AnswerSubmissionRepository
 import pt.iscte.questionengine.control.repositories.CodeSubmissionRepository
 import pt.iscte.questionengine.control.repositories.QuestionRepository
@@ -21,6 +26,7 @@ import pt.iscte.questionengine.model.AnswerInteraction
 import pt.iscte.questionengine.model.CodeSubmissionModel
 import pt.iscte.questionengine.model.QuestionModel
 import pt.iscte.questionengine.model.UserModel
+import java.util.*
 import kotlin.streams.toList
 
 @Service
@@ -32,8 +38,9 @@ class QuestionEngineService(private val userRepository: UserRepository,
 
 
     val staticQuestions = setOf(CallsOtherFunctions(), HowManyFunctions(), HowManyLoops(), HowManyParams(), HowManyVariables(), IsRecursive(),
-        WhichFixedValueVariables(), WhichFunctions(), WhichParams(), WhichVariableHoldsReturn(), WhichVariables()
-    )
+        WhichFixedValueVariables(), WhichFunctions(), WhichParams(), WhichVariableHoldsReturn(), WhichVariables())
+
+    val dynamicQuestions = setOf(HowDeepCallStack(), HowManyMethodsCalled(), WhatIsTheReturnValue())
 
     fun getQuestions(codeSubmissionModel: CodeSubmissionModel): CodeSubmissionResponse {
         val user = getUser(codeSubmissionModel.user)
@@ -73,10 +80,11 @@ class QuestionEngineService(private val userRepository: UserRepository,
 
     private fun getQuestions(codeSubmission: CodeSubmission): Collection<Question> {
         val module = PaddleUtils.loadCode(codeSubmission.content)
+        val vMachine = IMachine.create(module)
         val questions = mutableSetOf<Question>()
         for(procedure in module.procedures) {
             questions.addAll(generateStaticQuestions(procedure, codeSubmission))
-            //TODO dynamic questions
+            questions.addAll(generateDynamicQuestions(procedure, vMachine, codeSubmission))
         }
         return questions
     }
@@ -96,6 +104,27 @@ class QuestionEngineService(private val userRepository: UserRepository,
                 }
                 val question = questionRepository.save(Question(null, questionTemplate, codeSubmission, null,
                     it.question(procedure), it.answer(procedure).toString()))
+                questions.add(question)
+            }
+        return questions
+    }
+
+    private fun generateDynamicQuestions(procedure: IProcedure, state: IProgramState, codeSubmission: CodeSubmission): Collection<Question> {
+        val questions = mutableSetOf<Question>()
+        dynamicQuestions.forEach { it.loadState(procedure, state) }
+        dynamicQuestions
+            .filter { it.applicableTo() }
+            .forEach {
+                var questionTemplate = questionTemplateRepository
+                    .findQuestionTemplateByClazz(it::class::simpleName.get().toString())
+                if (questionTemplate == null) {
+                    val returnType = QuestionUtils.getReturnTypeOfAnswer(it::class)
+                    questionTemplate = questionTemplateRepository
+                        .save(QuestionTemplate(null, it::class::simpleName.get().toString(), QuestionType.DYNAMIC, null,
+                        returnType.toUpperCase()))
+                }
+                val question = questionRepository.save(Question(null, questionTemplate, codeSubmission, null,
+                it.question(), it.answer().toString()))
                 questions.add(question)
             }
         return questions

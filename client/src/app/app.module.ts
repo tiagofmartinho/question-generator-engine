@@ -52,7 +52,7 @@ import {
       providers: [
         {
           id: GoogleLoginProvider.PROVIDER_ID,
-          provider: new GoogleLoginProvider('GOOGLE_CLIENT_ID')
+          provider: new GoogleLoginProvider('206697004741-q1lbthprj96s444258jf8gsen6coh4im.apps.googleusercontent.com')
         }
       ]
     } as SocialAuthServiceConfig,

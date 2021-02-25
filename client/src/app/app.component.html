@@ -25,9 +25,8 @@
       Only your email and name are used for statistic purposes. They won't be disclosed without your permission.</i>
   </div>
 
-  <br>
-
   <form class="code-submission-form" *ngIf="phase !== 0">
+    <p>Hello {{ user.firstName }}!</p>
     <label for="editor">Paste your code here (make sure it has no errors!)</label>
     <ngx-codemirror
       id="editor"

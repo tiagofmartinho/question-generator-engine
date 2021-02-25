@@ -30,7 +30,7 @@ class QuestionUtils {
             return values.toTypedArray()
         }
 
-        fun getReturnTypeOfAnswer(kClass: KClass<out StaticQuestion<IProcedure, out Any>>): String {
+        fun getReturnTypeOfAnswer(kClass: KClass<out Any>): String {
             for (func in kClass.memberFunctions) {
                 if ("answer" == func.name) {
                     return getSimpleNameOfReturnType(func.returnType)

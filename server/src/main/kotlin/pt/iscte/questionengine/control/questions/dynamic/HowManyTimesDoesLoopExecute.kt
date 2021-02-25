@@ -4,17 +4,23 @@ import pt.iscte.paddle.interpreter.IProgramState
 import pt.iscte.paddle.model.IProcedure
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 
-class HowManyTimesDoesLoopExecute: DynamicQuestion<IProcedure, IProgramState, String>() {
+class HowManyTimesDoesLoopExecute(): DynamicQuestion<IProcedure, IProgramState, String>() {
 
-    override fun question(target: IProcedure): String {
-        return "How many times does the loop of ${target.signature()} execute?"
+    private lateinit var procSignature: String
+
+    override fun question(): String {
+        return "How many times does the loop of $procSignature execute?"
     }
 
-    override fun applicableTo(target: IProcedure): Boolean {
+    override fun applicableTo(): Boolean {
         TODO("Not yet implemented")
     }
 
-    override fun answer(target: IProcedure, state: IProgramState): String {
+    override fun answer(): String {
         TODO("Not yet implemented")
+    }
+
+    override fun loadState(target: IProcedure, state: IProgramState) {
+        procSignature = target.signature()
     }
 }

@@ -5,23 +5,29 @@ import pt.iscte.paddle.model.IProcedure
 import pt.iscte.questionengine.control.utils.QuestionUtils
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 
-class HowManyMethodsCalled: DynamicQuestion<IProcedure, IProgramState, String>() {
+class HowManyMethodsCalled(): DynamicQuestion<IProcedure, IProgramState, Int>() {
 
     private lateinit var argValues: Array<Any>
+    private lateinit var procSignature: String
+    private var methodsCalled = 0
 
-    override fun question(target: IProcedure): String {
-        return if (argValues.isNotEmpty()) "How many methods are called from executing ${target.signature()} " +
+    override fun question(): String {
+        return if (argValues.isNotEmpty()) "How many methods are called from executing $procSignature " +
                 "with arguments ${argValues.contentToString()}?"
-        else "how many methods are called from executing ${target.signature()}?"
+        else "How many methods are called from executing $procSignature ?"
     }
 
-    override fun applicableTo(target: IProcedure): Boolean {
-        argValues = QuestionUtils.generateValuesForParams(target.parameters)
+    override fun applicableTo(): Boolean {
         return true
     }
 
-    override fun answer(target: IProcedure, state: IProgramState): String {
-        val methodsCalled = state.execute(target, *argValues).totalProcedureCalls - 1
-        return methodsCalled.toString()
+    override fun answer(): Int {
+        return methodsCalled
+    }
+
+    override fun loadState(target: IProcedure, state: IProgramState) {
+        procSignature = target.signature()
+        argValues = QuestionUtils.generateValuesForParams(target.parameters)
+        methodsCalled = state.execute(target, *argValues).totalProcedureCalls - 1
     }
 }

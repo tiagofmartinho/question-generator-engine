@@ -5,23 +5,30 @@ import pt.iscte.paddle.model.IProcedure
 import pt.iscte.questionengine.control.utils.QuestionUtils
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 
-
 //TODO doesn't work with chars or Strings as return types
-class WhatIsTheReturnValue: DynamicQuestion<IProcedure, IProgramState, String>() {
+class WhatIsTheReturnValue(): DynamicQuestion<IProcedure, IProgramState, String>() {
 
     private lateinit var argValues: Array<Any>
+    private lateinit var procSignature: String
+    private lateinit var result: String
+    private var isApplicableTo = false
 
-    override fun question(target: IProcedure): String {
-        return if (argValues.isNotEmpty()) "What is the return value of ${target.signature()} " +
+    override fun question(): String {
+        return if (argValues.isNotEmpty()) "What is the return value of $procSignature " +
                 "with arguments ${argValues.contentToString()}?"
-        else "What is the return value of ${target.signature()}?"
+        else "What is the return value of $procSignature?"
     }
-    override fun applicableTo(target: IProcedure): Boolean {
+    override fun applicableTo(): Boolean {
+        return isApplicableTo
+    }
+    override fun answer(): String {
+        return result
+    }
+
+    override fun loadState(target: IProcedure, state: IProgramState) {
+        procSignature = target.signature()
         argValues = QuestionUtils.generateValuesForParams(target.parameters)
-        return target.returnType.isNumber || target.returnType.isBoolean
-    }
-    override fun answer(target: IProcedure, state: IProgramState): String {
-        val result = state.execute(target, *argValues)
-        return result.returnValue.toString()
+        isApplicableTo = target.returnType.isNumber || target.returnType.isBoolean
+        result = state.execute(target, *argValues).returnValue.toString()
     }
 }
