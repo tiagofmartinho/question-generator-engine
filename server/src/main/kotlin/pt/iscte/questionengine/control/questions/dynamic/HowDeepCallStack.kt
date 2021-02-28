@@ -13,10 +13,16 @@ class HowDeepCallStack(): DynamicQuestion<IProcedure, IProgramState, Int>() {
     private lateinit var procSignature: String
     private var callStackDepth = 0
 
+//    override fun question(): String {
+//        return if (argValues.isNotEmpty()) "How deep does the call stack grow from executing $procSignature " +
+//                "with arguments ${argValues.contentToString()}?"
+//        else "How deep does the call stack grow from executing $procSignature?"
+//    }
+
     override fun question(): String {
-        return if (argValues.isNotEmpty()) "How deep does the call stack grow from executing $procSignature " +
-                "with arguments ${argValues.contentToString()}?"
-        else "How deep does the call stack grow from executing $procSignature ?"
+        return if (argValues.isNotEmpty()) "Qual o nível de profundidade máximo da pilha de chamadas ao executar a função $procSignature " +
+                "com argumentos ${argValues.contentToString()}?"
+        else "Qual o nível de profundidade máximo da pilha de chamadas ao executar a função $procSignature?"
     }
 
      override fun applicableTo(): Boolean {
@@ -28,6 +34,7 @@ class HowDeepCallStack(): DynamicQuestion<IProcedure, IProgramState, Int>() {
     }
 
     override fun loadState(target: IProcedure, state: IProgramState) {
+        callStackDepth = 0
         procSignature = target.signature()
         argValues = QuestionUtils.generateValuesForParams(target.parameters)
         state.callStack.addListener(object : ICallStack.IListener {

@@ -6,7 +6,8 @@ import pt.iscte.questionengine.control.visitors.ProcedureCallVisitor
 
 class CallsOtherFunctions : StaticQuestion<IProcedure, Boolean>() {
 
-    override fun question(target: IProcedure) = "Does the function ${target.signature()} depend on other functions?"
+//    override fun question(target: IProcedure) = "Does the function ${target.signature()} depend on other functions?"
+    override fun question(target: IProcedure) = "A função ${target.signature()} depende de outras funções?"
     override fun applicableTo(target: IProcedure) = true
     override fun answer(target: IProcedure) : Boolean {
         val v = ProcedureCallVisitor()

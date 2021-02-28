@@ -8,6 +8,7 @@ import {User} from './model/user.model';
 import 'codemirror/mode/clike/clike';
 import {Question} from './model/question.model';
 import {HttpErrorResponse} from '@angular/common/http';
+import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -15,8 +16,11 @@ import {HttpErrorResponse} from '@angular/common/http';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  faTimes = faTimes
+  faCheck = faCheck
+  answerTemplate = 'A resposta correta para esta questão é:'
+
   interaction = new Interaction([]);
-  feedback: string[] = [];
   phase = 0;
   loading = false;
   allAnswersCorrect = true;
@@ -49,29 +53,6 @@ export class AppComponent {
       });
   }
 
-  private handleError(error: HttpErrorResponse) {
-    console.log(error);
-    if (error.status === 400) {
-      if (error.error.message === 'invalid_code') {
-        this.toastr.error('Your code has errors. Please submit syntactically correct code.');
-      }
-      else {
-        this.toastr.error('Invalid submission. Please fill all necessary inputs.')
-      }
-    } else if (error.status === 500) {
-      this.toastr.error('Server is not available at the moment or there was an error processing your request. Try again later.')
-    }
-  }
-
-  private mapQuestionsToModel(questions: Question[]) {
-    if (questions?.length > 0) {
-      questions.forEach(q => this.interaction.qas.push(new QuestionAnswersMapping(q)));
-      this.phase = 2;
-    } else {
-      this.toastr.error('No questions were generated for the code submitted. Add at least one method to your code.')
-    }
-  }
-
   submitAnswers() {
     this.loading = true;
     AppComponent.convertListStringToProperFormat(this.interaction.qas)
@@ -86,6 +67,29 @@ export class AppComponent {
       this.handleError(error);
       this.loading = false;
     });
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    console.log(error);
+    if (error.status === 400) {
+      if (error.error.message === 'invalid_code') {
+        this.toastr.error('O teu código tem erros. Por favor submete código sintaticamente correto.');
+      }
+      else {
+        this.toastr.error('Submissão inválida. Por favor preenche todos os campos.')
+      }
+    } else if (error.status === 500) {
+      this.toastr.error('O servidor não está disponível neste momento ou houve um erro a processar o teu pedido. Por favor tenta mais tarde.')
+    }
+  }
+
+  private mapQuestionsToModel(questions: Question[]) {
+    if (questions?.length > 0) {
+      questions.forEach(q => this.interaction.qas.push(new QuestionAnswersMapping(q)));
+      this.phase = 2;
+    } else {
+      this.toastr.error('Não foram geradas questões para o teu código. Adiciona pelo menos uma função à tua submissão.')
+    }
   }
 
   private static convertListStringToProperFormat(list: QuestionAnswersMapping[]) {
@@ -108,29 +112,22 @@ export class AppComponent {
   }
 
   private checkAnswer(qa: QuestionAnswersMapping) {
-    if (qa.correctAnswer == qa.userAnswer) {
-      this.feedback.push(
-        `For the question \"${qa.question.question}\" you answered CORRECTLY with \"${qa.userAnswer}\"`
-      );
-    } else {
+    if (qa.correctAnswer != qa.userAnswer) {
       this.allAnswersCorrect = false;
-      this.feedback.push(
-        `For the question \"${qa.question.question}\" you answered INCORRECTLY with: \"${qa.userAnswer}\" and the correct answer is \"${qa.correctAnswer}\"`
-      );
     }
   }
 
   private showResultsToast() {
     if (this.allAnswersCorrect) {
-      this.toastr.success('All questions were answered correctly!');
+      this.toastr.success('Respondeste corretamente a todas as questões!');
     } else {
-      this.toastr.error('You answered incorrectly to at least one question.');
+      this.toastr.error('Respondeste incorretamente a pelo menos uma questão.');
     }
   }
 
+
   cleanup() {
     this.phase = 1;
-    this.feedback = [];
     this.allAnswersCorrect = true;
     this.code = '';
     this.interaction = new Interaction([]);

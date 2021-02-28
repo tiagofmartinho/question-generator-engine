@@ -6,7 +6,9 @@ import pt.iscte.questionengine.control.visitors.VariableDeclarationVisitor
 
 class WhichVariables : StaticQuestion<IProcedure, Collection<String>>() {
 
-    override fun question(target: IProcedure): String = "Which variables does the function ${target.signature()} use?"
+//    override fun question(target: IProcedure): String = "Which variables does the function ${target.signature()} use?"
+
+    override fun question(target: IProcedure): String = "Que variáveis a função ${target.signature()} usa?"
 
     override fun applicableTo(target: IProcedure): Boolean = HowManyVariables().answer(target) > 0
 

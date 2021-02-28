@@ -22,6 +22,7 @@ import { SocialLoginModule, SocialAuthServiceConfig } from 'angularx-social-logi
 import {
   GoogleLoginProvider,
 } from 'angularx-social-login';
+import {FontAwesomeModule} from '@fortawesome/angular-fontawesome';
 
 
 
@@ -43,6 +44,7 @@ import {
     ToastrModule.forRoot(),
     SocialLoginModule,
     CodemirrorModule,
+    FontAwesomeModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [AppService, {

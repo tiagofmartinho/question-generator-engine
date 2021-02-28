@@ -11,14 +11,20 @@ class HowManyMethodsCalled(): DynamicQuestion<IProcedure, IProgramState, Int>() 
     private lateinit var procSignature: String
     private var methodsCalled = 0
 
+//    override fun question(): String {
+//        return if (argValues.isNotEmpty()) "How many methods are called from executing $procSignature " +
+//                "with arguments ${argValues.contentToString()}?"
+//        else "How many methods are called from executing $procSignature ?"
+//    }
+
     override fun question(): String {
-        return if (argValues.isNotEmpty()) "How many methods are called from executing $procSignature " +
-                "with arguments ${argValues.contentToString()}?"
-        else "How many methods are called from executing $procSignature ?"
+        return if (argValues.isNotEmpty()) "Quantas funções são chamadas ao executar a função $procSignature " +
+                "com os argumentos ${argValues.contentToString()}?"
+        else "Quantas funções são chamadas ao executar a função $procSignature ?"
     }
 
     override fun applicableTo(): Boolean {
-        return true
+        return methodsCalled > 0
     }
 
     override fun answer(): Int {
@@ -28,6 +34,6 @@ class HowManyMethodsCalled(): DynamicQuestion<IProcedure, IProgramState, Int>() 
     override fun loadState(target: IProcedure, state: IProgramState) {
         procSignature = target.signature()
         argValues = QuestionUtils.generateValuesForParams(target.parameters)
-        methodsCalled = state.execute(target, *argValues).totalProcedureCalls - 1
+        methodsCalled = state.execute(target, *argValues).totalProcedureCalls-1
     }
 }

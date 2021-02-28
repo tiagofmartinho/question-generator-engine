@@ -12,18 +12,21 @@ import kotlin.reflect.full.memberFunctions
 class QuestionUtils {
 
     companion object {
+        //TODO adapt to instance methods (remove this from params)
         fun IProcedure.signature() = id + "(" + parameters.joinToString (separator = ", ") { it.type.id } + ")"
 
+        //TODO adapt to instance methods ("this")
         private fun generateValueForType(type: IType): Any {
-            when (type) {
-                IType.INT -> return Random.nextInt(0, 100)
-                IType.BOOLEAN -> return Random.nextBoolean()
-                IType.DOUBLE -> return Random.nextDouble(0.0, 100.0)
-                IType.CHAR -> return 'a'..'z'.toString().random()
+            return when (type) {
+                IType.INT -> Random.nextInt(0, 100)
+                IType.BOOLEAN -> Random.nextBoolean()
+                IType.DOUBLE -> Random.nextDouble(0.0, 100.0)
+                IType.CHAR -> 'a'..'z'.toString().random()
+                else -> type
             }
-            throw IllegalArgumentException("Requires a type")
         }
 
+        //TODO adapt for instance methods (don't generate for "this")
         fun generateValuesForParams(params: List<IVariableDeclaration>): Array<Any> {
             val values = mutableListOf<Any>()
             params.forEach { values.add(generateValueForType(it.type)) }
