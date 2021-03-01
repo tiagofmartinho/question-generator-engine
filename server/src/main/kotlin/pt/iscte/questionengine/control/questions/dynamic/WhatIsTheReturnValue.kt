@@ -34,7 +34,7 @@ class WhatIsTheReturnValue(): DynamicQuestion<IProcedure, IProgramState, String>
 
     override fun loadState(target: IProcedure, state: IProgramState) {
         procSignature = target.signature()
-        argValues = QuestionUtils.generateValuesForParams(target.parameters)
+        argValues = QuestionUtils.generateValuesForParams(target.parameters, state)
         isApplicableTo = target.returnType.isNumber || target.returnType.isBoolean
         if (isApplicableTo) result = state.execute(target, *argValues).returnValue.toString()
     }

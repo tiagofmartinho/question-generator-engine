@@ -33,7 +33,7 @@ class HowManyMethodsCalled(): DynamicQuestion<IProcedure, IProgramState, Int>() 
 
     override fun loadState(target: IProcedure, state: IProgramState) {
         procSignature = target.signature()
-        argValues = QuestionUtils.generateValuesForParams(target.parameters)
+        argValues = QuestionUtils.generateValuesForParams(target.parameters, state)
         methodsCalled = state.execute(target, *argValues).totalProcedureCalls-1
     }
 }
