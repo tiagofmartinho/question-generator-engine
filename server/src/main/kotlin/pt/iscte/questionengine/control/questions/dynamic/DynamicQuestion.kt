@@ -12,6 +12,7 @@ import pt.iscte.questionengine.entity.ProficiencyLevel
     @param STATE virtual machine state to run the code
  **/
 
+//TODO try stateless approach like static questions
 abstract class DynamicQuestion<in TARGET: IProcedure, STATE: IProgramState, ANSWER>  {
     abstract fun question(): String
     abstract fun applicableTo(): Boolean

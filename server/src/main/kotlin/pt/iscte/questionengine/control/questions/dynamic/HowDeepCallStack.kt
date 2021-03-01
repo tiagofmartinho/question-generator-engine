@@ -37,7 +37,7 @@ class HowDeepCallStack(): DynamicQuestion<IProcedure, IProgramState, Int>() {
     override fun loadState(target: IProcedure, state: IProgramState) {
         callStackDepth = 0
         procSignature = target.signature()
-        argValues = QuestionUtils.generateValuesForParams(target.parameters)
+        argValues = QuestionUtils.generateValuesForParams(target.parameters, state)
         state.callStack.addListener(object : ICallStack.IListener {
             override fun stackFrameCreated(stackFrame: IStackFrame?) {
                 if (stackFrame != null) {

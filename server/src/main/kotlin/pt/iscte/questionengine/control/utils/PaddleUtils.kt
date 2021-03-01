@@ -14,6 +14,5 @@ class PaddleUtils {
         fun loadCode(code: String): IModule {
             return Java2Paddle("someModuleId", code).parse()
         }
-
     }
 }

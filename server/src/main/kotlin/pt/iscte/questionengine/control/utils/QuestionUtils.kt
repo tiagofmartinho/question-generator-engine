@@ -9,6 +9,10 @@ import pt.iscte.questionengine.control.questions.dynamic.HowDeepCallStack
 import pt.iscte.questionengine.control.questions.dynamic.HowManyMethodsCalled
 import pt.iscte.questionengine.control.questions.dynamic.WhatIsTheReturnValue
 import pt.iscte.questionengine.control.questions.staticz.*
+import pt.iscte.paddle.interpreter.IReference
+import pt.iscte.paddle.interpreter.IValue
+import pt.iscte.paddle.model.*
+import java.lang.UnsupportedOperationException
 import kotlin.random.Random
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
@@ -29,19 +33,36 @@ class QuestionUtils {
             return setOf(HowDeepCallStack(), HowManyMethodsCalled(), WhatIsTheReturnValue())
         }
 
-        private fun generateValueForType(type: IType): Any {
+        private fun generateValueForType(type: IType, state: IProgramState): Any {
             return when (type) {
-                IType.INT -> Random.nextInt(0, 100)
-                IType.BOOLEAN -> Random.nextBoolean()
-                IType.DOUBLE -> Random.nextDouble(0.0, 100.0)
-                IType.CHAR -> 'a'..'z'.toString().random()
-                else -> type
+                is IValueType -> when(type) {
+                    IType.INT ->  state.getValue(Random.nextInt(0, 10))
+                    IType.BOOLEAN -> state.getValue(Random.nextBoolean())
+                    IType.DOUBLE -> state.getValue(Random.nextDouble(0.0, 100.0))
+                    IType.CHAR -> state.getValue(('a'..'z').random())
+                    else -> throw UnsupportedOperationException()
+                }
+                else -> return when {
+                    type is IReferenceType && type.target is IArrayType -> {
+                        val len = Random.nextInt(0, 10)
+                        val array = state.allocateArray((type.target as IArrayType).componentType, len )
+                        for(i in 0 until array.length)
+                            array.setElement(i, generateValueForType((type.target as IArrayType).componentType, state) as IValue)
+
+                        IReference.create(array)
+                    }
+                    type is IReferenceType && type.target is IRecordType -> {
+                        val record = state.allocateRecord(type.target as IRecordType)
+                        IReference.create(record)
+                    }
+                    else -> throw UnsupportedOperationException()
+                }
             }
         }
 
-        fun generateValuesForParams(params: List<IVariableDeclaration>): Array<Any> {
+        fun generateValuesForParams(params: List<IVariableDeclaration>, state: IProgramState): Array<Any> {
             val values = mutableListOf<Any>()
-            params.forEach { values.add(generateValueForType(it.type)) }
+            params.forEach { values.add(generateValueForType(it.type, state)) }
             return values.toTypedArray()
         }
 
