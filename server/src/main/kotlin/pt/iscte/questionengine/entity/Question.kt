@@ -1,6 +1,5 @@
 package pt.iscte.questionengine.entity
 
-import javax.persistence.CascadeType
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.Id
@@ -14,6 +13,7 @@ import javax.persistence.Table
 class Question(@Id @GeneratedValue var id: Long? = null,
                @ManyToOne @JoinColumn var questionTemplate: QuestionTemplate,
                @ManyToOne @JoinColumn var codeSubmission: CodeSubmission,
+               @ManyToOne @JoinColumn var language: Language,
                @OneToOne var answerSubmission: AnswerSubmission?,
                var question: String,
                var correctAnswer: String)

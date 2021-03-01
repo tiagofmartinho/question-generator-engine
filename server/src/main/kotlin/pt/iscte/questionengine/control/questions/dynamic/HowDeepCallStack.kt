@@ -6,6 +6,7 @@ import pt.iscte.paddle.interpreter.IStackFrame
 import pt.iscte.paddle.model.IProcedure
 import pt.iscte.questionengine.control.utils.QuestionUtils
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
+import pt.iscte.questionengine.entity.ProficiencyLevel
 
 class HowDeepCallStack(): DynamicQuestion<IProcedure, IProgramState, Int>() {
 
@@ -47,4 +48,5 @@ class HowDeepCallStack(): DynamicQuestion<IProcedure, IProgramState, Int>() {
         })
         state.execute(target, *argValues)
     }
+    override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.A
 }

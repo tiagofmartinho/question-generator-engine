@@ -5,6 +5,7 @@ import pt.iscte.paddle.model.IProcedure
 import pt.iscte.paddle.model.IVariableAssignment
 import pt.iscte.paddle.model.IVariableDeclaration
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
+import pt.iscte.questionengine.entity.ProficiencyLevel
 
 class WhichFixedValueVariables : StaticQuestion<IProcedure, Collection<String>>() {
 
@@ -31,7 +32,6 @@ class WhichFixedValueVariables : StaticQuestion<IProcedure, Collection<String>>(
      * Parameters can be reassigned one or more times so they can't be part of the result in this case
      * If they aren't present in the map it means they are a fixed variable, in which case they have to be added to the result
      */
-    //TODO don't count "this"
     private fun getFixedValueVariables(map: Map<String, Int>, parameters: MutableList<IVariableDeclaration>): Collection<String> {
         val result = map.keys.toMutableSet()
         for (param in parameters) {
@@ -43,4 +43,6 @@ class WhichFixedValueVariables : StaticQuestion<IProcedure, Collection<String>>(
         }
         return result
     }
+
+    override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.B
 }

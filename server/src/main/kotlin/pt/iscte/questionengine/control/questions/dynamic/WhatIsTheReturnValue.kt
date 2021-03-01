@@ -4,6 +4,7 @@ import pt.iscte.paddle.interpreter.IProgramState
 import pt.iscte.paddle.model.IProcedure
 import pt.iscte.questionengine.control.utils.QuestionUtils
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
+import pt.iscte.questionengine.entity.ProficiencyLevel
 
 //TODO doesn't work with chars or Strings as return types
 class WhatIsTheReturnValue(): DynamicQuestion<IProcedure, IProgramState, String>() {
@@ -38,4 +39,6 @@ class WhatIsTheReturnValue(): DynamicQuestion<IProcedure, IProgramState, String>
         isApplicableTo = target.returnType.isNumber || target.returnType.isBoolean
         if (isApplicableTo) result = state.execute(target, *argValues).returnValue.toString()
     }
+
+    override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.A
 }

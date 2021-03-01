@@ -1,6 +1,7 @@
 package pt.iscte.questionengine.control.questions.staticz
 
 import pt.iscte.paddle.model.IProgramElement
+import pt.iscte.questionengine.entity.ProficiencyLevel
 
 /**
     Represents an abstract static question.
@@ -25,4 +26,9 @@ abstract class StaticQuestion<in TARGET: IProgramElement, ANSWER> {
     pre-condition: isApplicable(p) = true
      */
     abstract fun answer(target: TARGET): ANSWER
+
+    /*
+    The level of proficiency that the question requires from the users in order to be asked to them
+     */
+    abstract fun proficiencyLevel() : ProficiencyLevel
 }

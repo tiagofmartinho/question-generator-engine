@@ -1,3 +1,5 @@
 package pt.iscte.questionengine.exceptions
 
-open class QuestionEngineException() : Exception() {}
+import java.lang.RuntimeException
+
+open class QuestionEngineException() : RuntimeException() {}

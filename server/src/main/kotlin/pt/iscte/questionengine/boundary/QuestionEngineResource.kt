@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import pt.iscte.questionengine.control.QuestionEngineService
+import pt.iscte.questionengine.control.services.QuestionEngineService
 import pt.iscte.questionengine.exceptions.InvalidCodeException
 import pt.iscte.questionengine.model.AnswerInteraction
 import pt.iscte.questionengine.model.CodeSubmissionModel
@@ -28,7 +28,7 @@ class QuestionEngineResource(val service: QuestionEngineService) {
     }
 
     @PostMapping("answer")
-    fun submitAnswer(@RequestBody answers: AnswerInteraction): Map<Long, String> {
-        return service.getCorrectAnswers(answers)
+    fun submitAnswer(@RequestBody answerInteraction: AnswerInteraction): Map<Long, String> {
+        return service.getCorrectAnswers(answerInteraction)
     }
 }

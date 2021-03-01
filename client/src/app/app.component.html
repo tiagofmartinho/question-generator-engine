@@ -54,8 +54,8 @@
             <div *ngIf="qa.question.returnType != 'BOOLEAN' && qa.question.returnType != 'COLLECTION'">
               <label>
                 {{index+1}}. {{ qa.question.question }}
-                <fa-icon *ngIf="qa.correctAnswer != null && qa.correctAnswer == qa.userAnswer" [icon]="faCheck" style="color: green"></fa-icon>
-                <fa-icon *ngIf="qa.correctAnswer != null && qa.correctAnswer != qa.userAnswer" [icon]="faTimes" style="color: red"></fa-icon>
+                <fa-icon *ngIf="isAnswerCorrect(qa)" [icon]="faCheck" style="color: green"></fa-icon>
+                <fa-icon *ngIf="isAnswerIncorrect(qa)" [icon]="faTimes" style="color: red"></fa-icon>
                 <br>
                 <input class="mt-2" type="number" *ngIf="qa.question.returnType != 'STRING'" name="answer{{index}}"
                        [disabled]="phase === 3" required [(ngModel)]="qa.userAnswer">
@@ -76,16 +76,16 @@
               <mat-radio-group required [disabled]="phase === 3" class="radio-group mt-2" [(ngModel)]="qa.userAnswer" name="answer{{index}}"
                                aria-labelledby="radio-label">
                 <mat-radio-button value="true">Verdadeiro
-                  <fa-icon *ngIf="qa.correctAnswer != null && qa.correctAnswer == qa.userAnswer && qa.userAnswer == 'true'"
+                  <fa-icon *ngIf="isAnswerCorrect(qa) && qa.userAnswer == 'true'"
                            [icon]="faCheck" style="color: green"></fa-icon>
-                  <fa-icon *ngIf="qa.correctAnswer != null && qa.correctAnswer != qa.userAnswer && qa.userAnswer == 'true'"
+                  <fa-icon *ngIf="isAnswerIncorrect(qa) && qa.userAnswer == 'true'"
                            [icon]="faTimes" style="color: red"></fa-icon>
                 </mat-radio-button>
                 <br>
                 <mat-radio-button value="false">Falso
-                  <fa-icon *ngIf="qa.correctAnswer != null && qa.correctAnswer == qa.userAnswer && qa.userAnswer == 'false'"
+                  <fa-icon *ngIf="isAnswerCorrect(qa) && qa.userAnswer == 'false'"
                            [icon]="faCheck" style="color: green"></fa-icon>
-                  <fa-icon *ngIf="qa.correctAnswer != null && qa.correctAnswer != qa.userAnswer && qa.userAnswer == 'false'"
+                  <fa-icon *ngIf="isAnswerIncorrect(qa) && qa.userAnswer == 'false'"
                            [icon]="faTimes" style="color: red"></fa-icon>
                 </mat-radio-button>
               </mat-radio-group>
@@ -98,13 +98,13 @@
           <div *ngIf="qa.question.returnType == 'COLLECTION'" class="example-full-width">
             <label>
               {{index+1}}. {{ qa.question.question }}
-              <fa-icon *ngIf="qa.correctAnswer != null && qa.correctAnswer == qa.userAnswer" [icon]="faCheck" style="color: green"></fa-icon>
-              <fa-icon *ngIf="qa.correctAnswer != null && qa.correctAnswer != qa.userAnswer" [icon]="faTimes" style="color: red"></fa-icon>
+              <fa-icon *ngIf="isAnswerCorrect(qa)" [icon]="faCheck" style="color: green"></fa-icon>
+              <fa-icon *ngIf="isAnswerIncorrect(qa)" [icon]="faTimes" style="color: red"></fa-icon>
               <br>
               <textarea class="mt-2" rows=3 cols=40 placeholder="Digita 1 valor por linha..." name="answer{{index}}"
                         [disabled]="phase === 3" required [(ngModel)]="qa.userAnswer"></textarea>
             </label>
-            <i class="text-muted" *ngIf="qa.correctAnswer != null && qa.correctAnswer != qa.userAnswer">
+            <i class="text-muted" *ngIf="isAnswerIncorrect(qa)">
               <br>
               {{answerTemplate}} {{ qa.correctAnswer }}
             </i>

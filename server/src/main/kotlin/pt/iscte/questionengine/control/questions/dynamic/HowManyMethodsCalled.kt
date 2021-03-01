@@ -4,6 +4,7 @@ import pt.iscte.paddle.interpreter.IProgramState
 import pt.iscte.paddle.model.IProcedure
 import pt.iscte.questionengine.control.utils.QuestionUtils
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
+import pt.iscte.questionengine.entity.ProficiencyLevel
 
 class HowManyMethodsCalled(): DynamicQuestion<IProcedure, IProgramState, Int>() {
 
@@ -36,4 +37,5 @@ class HowManyMethodsCalled(): DynamicQuestion<IProcedure, IProgramState, Int>() 
         argValues = QuestionUtils.generateValuesForParams(target.parameters)
         methodsCalled = state.execute(target, *argValues).totalProcedureCalls-1
     }
+    override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.B
 }

@@ -9,6 +9,7 @@ import 'codemirror/mode/clike/clike';
 import {Question} from './model/question.model';
 import {HttpErrorResponse} from '@angular/common/http';
 import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
+import * as _ from "lodash";
 
 @Component({
   selector: 'app-root',
@@ -55,7 +56,7 @@ export class AppComponent {
 
   submitAnswers() {
     this.loading = true;
-    AppComponent.convertListStringToProperFormat(this.interaction.qas)
+    AppComponent.convertCollectionStringToProperFormat(this.interaction.qas)
     return this.service.submitAnswers(this.interaction.userId, this.interaction.qas)
     .toPromise().then((data) => {
       console.log(data);
@@ -92,14 +93,6 @@ export class AppComponent {
     }
   }
 
-  private static convertListStringToProperFormat(list: QuestionAnswersMapping[]) {
-    list.forEach(qa => {
-      if (qa?.question?.returnType == 'COLLECTION') {
-        qa.userAnswer = "[" + qa?.userAnswer?.split(/[\r\n]+/).toString() + "]"
-      }
-    })
-  }
-
   private mapCorrectAnswersToInteractionModel(data: Map<number, string>) {
     for (const [questionId, correctAnswer] of Object.entries(data)) {
       this.interaction.qas.forEach(qa => {
@@ -112,9 +105,25 @@ export class AppComponent {
   }
 
   private checkAnswer(qa: QuestionAnswersMapping) {
-    if (qa.correctAnswer != qa.userAnswer) {
-      this.allAnswersCorrect = false;
-    }
+    if (this.isAnswerIncorrect(qa)) this.allAnswersCorrect = false;
+  }
+
+  private static isCollection(qa: QuestionAnswersMapping): boolean {
+    return qa.question.returnType === 'COLLECTION' &&
+      _.isEqual(AppComponent.convertCollectionStringFormatToSet(qa.correctAnswer), AppComponent.convertCollectionStringFormatToSet(qa.userAnswer));
+  }
+
+  private static convertCollectionStringFormatToSet(collectionString: string): Set<string> {
+    const arr = collectionString.slice(1, -1).replace(/\s+/g, '').split(',');
+    return new Set(arr);
+  }
+
+  private static convertCollectionStringToProperFormat(list: QuestionAnswersMapping[]) {
+    list.forEach(qa => {
+      if (qa?.question?.returnType == 'COLLECTION') {
+        qa.userAnswer = "[" + qa?.userAnswer?.split(/[\r\n]+/).toString() + "]"
+      }
+    })
   }
 
   private showResultsToast() {
@@ -125,6 +134,13 @@ export class AppComponent {
     }
   }
 
+  public isAnswerCorrect(qa: QuestionAnswersMapping) {
+    return ((qa.correctAnswer != null && qa.correctAnswer == qa.userAnswer)) || (qa.correctAnswer != null && AppComponent.isCollection(qa));
+  }
+
+  public isAnswerIncorrect(qa: QuestionAnswersMapping) {
+    return (qa.correctAnswer != null && qa.correctAnswer != qa.userAnswer && !AppComponent.isCollection(qa));
+  }
 
   cleanup() {
     this.phase = 1;

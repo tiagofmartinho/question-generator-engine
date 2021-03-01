@@ -3,6 +3,7 @@ package pt.iscte.questionengine.control.questions.staticz
 import pt.iscte.paddle.model.IProcedure
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.control.visitors.ProcedureCallVisitor
+import pt.iscte.questionengine.entity.ProficiencyLevel
 
 class CallsOtherFunctions : StaticQuestion<IProcedure, Boolean>() {
 
@@ -14,4 +15,6 @@ class CallsOtherFunctions : StaticQuestion<IProcedure, Boolean>() {
         target.accept(v)
         return v.procedureCalls.size > 0
     }
+
+    override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.C
 }

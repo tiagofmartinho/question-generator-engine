@@ -6,6 +6,7 @@ import pt.iscte.paddle.model.IReturn
 import pt.iscte.paddle.model.IVariableDeclaration
 import pt.iscte.paddle.model.IVariableExpression
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
+import pt.iscte.questionengine.entity.ProficiencyLevel
 
 class WhichVariableHoldsReturn : StaticQuestion<IProcedure, IVariableDeclaration>() {
 
@@ -42,4 +43,6 @@ class WhichVariableHoldsReturn : StaticQuestion<IProcedure, IVariableDeclaration
         fun areAllReturnsToSameVar() = returns == returnsOfVar && varsOnReturn.size == 1
         fun getVar() = varsOnReturn[0]
     }
+
+    override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.B
 }

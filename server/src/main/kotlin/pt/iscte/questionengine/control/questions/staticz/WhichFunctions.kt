@@ -3,6 +3,7 @@ package pt.iscte.questionengine.control.questions.staticz
 import pt.iscte.paddle.model.IProcedure
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.control.visitors.ProcedureCallVisitor
+import pt.iscte.questionengine.entity.ProficiencyLevel
 
 class WhichFunctions : StaticQuestion<IProcedure, Collection<String>>() {
 
@@ -14,4 +15,5 @@ class WhichFunctions : StaticQuestion<IProcedure, Collection<String>>() {
         target.accept(v)
         return v.procedureCalls.map { it.split(' ')[1] }
     }
+    override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.C
 }

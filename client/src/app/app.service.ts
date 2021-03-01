@@ -11,7 +11,7 @@ export class AppService {
     constructor(private http: HttpClient) {}
 
     submitCode(code: string, user: User): Observable<CodeSubmissionResponse> {
-        return this.http.post<CodeSubmissionResponse>(`${environment.baseUrl}/code`, { code, user },
+        return this.http.post<CodeSubmissionResponse>(`${environment.baseUrl}/code`, { code, user, languageCode: 'pt' },
           { headers: new HttpHeaders({ 'Content-Type': 'application/json'})});
     }
 
@@ -19,9 +19,4 @@ export class AppService {
         return this.http.post<Map<number, string>>(`${environment.baseUrl}/answer`, { userId, questionsAnswers: qas },
           { headers: new HttpHeaders({ 'Content-Type': 'application/json'})});
     }
-
-  test(): Observable<string> {
-    return this.http.get<string>(`${environment.baseUrl}/test`);
-  }
-
 }

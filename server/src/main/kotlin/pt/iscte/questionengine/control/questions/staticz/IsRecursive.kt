@@ -2,6 +2,7 @@ package pt.iscte.questionengine.control.questions.staticz
 
 import pt.iscte.paddle.model.IProcedure
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
+import pt.iscte.questionengine.entity.ProficiencyLevel
 
 class IsRecursive : StaticQuestion<IProcedure, Boolean>()  {
 
@@ -12,4 +13,5 @@ class IsRecursive : StaticQuestion<IProcedure, Boolean>()  {
     // and vice-versa
     override fun applicableTo(target: IProcedure) = HowManyLoops().answer(target) > 0
     override fun answer(target: IProcedure): Boolean = target.isRecursive
+    override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.C
 }
