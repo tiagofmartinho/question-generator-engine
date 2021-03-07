@@ -12,11 +12,10 @@ import pt.iscte.questionengine.entity.ProficiencyLevel
     @param STATE virtual machine state to run the code
  **/
 
-//TODO try stateless approach like static questions
 abstract class DynamicQuestion<in TARGET: IProcedure, STATE: IProgramState, ANSWER>  {
-    abstract fun question(): String
-    abstract fun applicableTo(): Boolean
-    abstract fun answer(): ANSWER
-    abstract fun loadState(target: TARGET, state: STATE)
+
+    abstract fun question(target: TARGET, args: Array<Any>): String
+    abstract fun applicableTo(target: TARGET, answer: Any): Boolean
+    abstract fun answer(target: TARGET, state: STATE, args: Array<Any>): ANSWER
     abstract fun proficiencyLevel() : ProficiencyLevel
 }

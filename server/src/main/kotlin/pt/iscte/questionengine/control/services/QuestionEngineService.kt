@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import pt.iscte.paddle.interpreter.IMachine
 import pt.iscte.paddle.interpreter.IProgramState
 import pt.iscte.paddle.model.IProcedure
+import pt.iscte.questionengine.control.questions.staticz.StaticQuestion
 import pt.iscte.questionengine.control.repositories.*
 import pt.iscte.questionengine.control.utils.PaddleUtils
 import pt.iscte.questionengine.control.utils.QuestionUtils
@@ -20,7 +21,8 @@ class QuestionEngineService(private val userService: UserService,
                             private val languageService: LanguageService,
                             private val proficiencyService: ProficiencyService) {
 
-    val staticQuestions = QuestionUtils.getStaticQuestions()
+//    val staticQuestions = QuestionUtils.getStaticQuestions()
+    val staticQuestions = emptySet<StaticQuestion<IProcedure, out Any>>()
     val dynamicQuestions = QuestionUtils.getDynamicQuestions()
 
     fun getQuestions(codeSubmissionModel: CodeSubmissionModel): CodeSubmissionResponse {
@@ -84,22 +86,23 @@ class QuestionEngineService(private val userService: UserService,
 
     private fun generateDynamicQuestions(procedure: IProcedure, state: IProgramState, codeSubmission: CodeSubmission, language: Language): Collection<Question> {
         val questions = mutableSetOf<Question>()
-        dynamicQuestions.forEach { it.loadState(procedure, state) }
-        dynamicQuestions
-            .filter { it.applicableTo() }
-            .forEach {
+        dynamicQuestions.forEach {
+            val args = QuestionUtils.generateValuesForParams(procedure.parameters, state)
+            val answer = it.answer(procedure, state, args)
+            if (it.applicableTo(procedure, answer)) {
                 var questionTemplate = questionTemplateRepository
                     .findQuestionTemplateByClazz(it::class::simpleName.get().toString())
                 if (questionTemplate == null) {
                     val returnType = QuestionUtils.getReturnTypeOfAnswer(it::class)
                     questionTemplate = questionTemplateRepository
                         .save(QuestionTemplate(null, it::class::simpleName.get().toString(), QuestionType.DYNAMIC, null,
-                        proficiencyService.getProficiency(it.proficiencyLevel()), returnType.toUpperCase()))
+                            proficiencyService.getProficiency(it.proficiencyLevel()), returnType.toUpperCase()))
                 }
                 val question = questionRepository.save(Question(null, questionTemplate, codeSubmission, language, null,
-                it.question(), it.answer().toString()))
+                    it.question(procedure, args), answer.toString()))
                 questions.add(question)
             }
+        }
         return questions
     }
 

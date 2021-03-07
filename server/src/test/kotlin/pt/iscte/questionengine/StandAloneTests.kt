@@ -53,9 +53,9 @@ fun main() {
         }
     })
     val q = HowDeepCallStack()
-    q.loadState(m.procedures[2], state)
-    val ap = q.applicableTo()
-    println(ap)
-    println(q.question() + q.answer())
+//    q.loadState(m.procedures[2], state)
+//    val ap = q.applicableTo()
+//    println(ap)
+//    println(q.question() + q.answer())
 
 }

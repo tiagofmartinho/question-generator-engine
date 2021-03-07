@@ -21,12 +21,42 @@ import kotlin.reflect.full.memberFunctions
 class QuestionUtils {
 
     companion object {
-        fun IProcedure.signature() = id + "(" + parameters.joinToString (separator = ", ") { it.type.id } + ")"
+        fun IProcedure.signature(): String {
+            return id + "(" + getParameterListWithoutThis(parameters).joinToString (separator = ", ") { it.type.id + " " + it.toString() } + ")"
+        }
 
-        //WhichFixedValueVariables(), WhichVariables()
+        private fun getParameterListWithoutThis(parameters: List<IVariableDeclaration>): List<IVariableDeclaration> {
+            val params = parameters.toMutableList()
+            if (params.isNotEmpty()) {
+                val firstArgument = params[0]
+                if (firstArgument.toString() == "this") {
+                    params.removeAt(0)
+                }
+            }
+            return params
+        }
+
+         fun formatArgumentList(args: Array<Any>): List<Any> {
+            val argumentList = args.toMutableList()
+            if (args.isNotEmpty()) {
+                val firstArgument = args[0]
+                if (firstArgument is IReference && firstArgument.type is IRecordType) {
+                    argumentList.removeAt(0)
+                }
+            }
+             //format array arguments (remove "->")
+             for ((index, element) in argumentList.withIndex())
+             {
+                 if (element is IReference && element.type is IArrayType) {
+                     argumentList[index] = element.toString().substring(2)
+                 }
+             }
+             return argumentList
+        }
+
         fun getStaticQuestions(): Set<StaticQuestion<IProcedure, out Any>> {
             return setOf(CallsOtherFunctions(), HowManyFunctions(), HowManyLoops(), HowManyParams(), HowManyVariables(), IsRecursive(),
-                WhichFunctions(), WhichParams(), WhichVariableHoldsReturn())
+                WhichFunctions(), WhichParams(), WhichVariableHoldsReturn(), WhichFixedValueVariables(), WhichVariables())
         }
 
         fun getDynamicQuestions(): Set<DynamicQuestion<IProcedure, IProgramState,out Any>> {
@@ -44,7 +74,7 @@ class QuestionUtils {
                 }
                 else -> return when {
                     type is IReferenceType && type.target is IArrayType -> {
-                        val len = Random.nextInt(0, 10)
+                        val len = Random.nextInt(1, 6)
                         val array = state.allocateArray((type.target as IArrayType).componentType, len )
                         for(i in 0 until array.length)
                             array.setElement(i, generateValueForType((type.target as IArrayType).componentType, state) as IValue)
