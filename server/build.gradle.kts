@@ -26,6 +26,7 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("com.google.googlejavaformat:google-java-format:1.9")
+	implementation("io.github.microutils:kotlin-logging:1.12.5")
 	implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 }
 

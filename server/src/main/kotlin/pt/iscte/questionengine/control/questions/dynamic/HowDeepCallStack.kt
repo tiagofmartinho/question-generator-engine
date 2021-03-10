@@ -1,5 +1,6 @@
 package pt.iscte.questionengine.control.questions.dynamic
 
+import mu.KotlinLogging
 import pt.iscte.paddle.interpreter.ICallStack
 import pt.iscte.paddle.interpreter.IProgramState
 import pt.iscte.paddle.interpreter.IStackFrame
@@ -7,8 +8,11 @@ import pt.iscte.paddle.model.IProcedure
 import pt.iscte.questionengine.control.utils.QuestionUtils
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
+import java.lang.RuntimeException
 
 class HowDeepCallStack(): DynamicQuestion<IProcedure, IProgramState, Int>() {
+
+    private val logger = KotlinLogging.logger {}
 
     override fun question(target: IProcedure, args: Array<Any>): String {
         val argumentList = QuestionUtils.formatArgumentList(args)
@@ -31,7 +35,12 @@ class HowDeepCallStack(): DynamicQuestion<IProcedure, IProgramState, Int>() {
                  }
              }
          })
-         state.execute(target, *args)
+         try {
+             state.execute(target, *args)
+         } catch (e: RuntimeException) {
+            logger.warn { "exception on HowDeepCallStack question: $e" }
+         }
+
          return callStackDepth
      }
 
