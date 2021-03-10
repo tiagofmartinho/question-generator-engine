@@ -14,7 +14,7 @@ import pt.iscte.questionengine.model.CodeSubmissionResponse
 
 @CrossOrigin
 @RestController
-@RequestMapping("submit")
+@RequestMapping("questionengine")
 class QuestionEngineResource(val service: QuestionEngineService) {
 
     @PostMapping("code")

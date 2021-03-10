@@ -1,16 +1,10 @@
 package pt.iscte.questionengine.entity
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.OneToOne
-import javax.persistence.Table
+import javax.persistence.*
 
 @Entity
 @Table(name = "question", schema = "question_engine")
-class Question(@Id @GeneratedValue var id: Long? = null,
+class Question(@Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
                @ManyToOne @JoinColumn var questionTemplate: QuestionTemplate,
                @ManyToOne @JoinColumn var codeSubmission: CodeSubmission,
                @ManyToOne @JoinColumn var language: Language,

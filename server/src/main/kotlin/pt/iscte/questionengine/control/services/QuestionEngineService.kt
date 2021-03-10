@@ -21,8 +21,7 @@ class QuestionEngineService(private val userService: UserService,
                             private val languageService: LanguageService,
                             private val proficiencyService: ProficiencyService) {
 
-//    val staticQuestions = QuestionUtils.getStaticQuestions()
-    val staticQuestions = emptySet<StaticQuestion<IProcedure, out Any>>()
+    val staticQuestions = QuestionUtils.getStaticQuestions()
     val dynamicQuestions = QuestionUtils.getDynamicQuestions()
 
     fun getQuestions(codeSubmissionModel: CodeSubmissionModel): CodeSubmissionResponse {

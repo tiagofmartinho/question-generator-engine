@@ -5,7 +5,7 @@ import kotlin.reflect.KType
 
 @Entity
 @Table(name = "question_template", schema = "question_engine")
-class QuestionTemplate(@Id @GeneratedValue var id: Long? = null, @Column(unique=true) var clazz: String,
+class QuestionTemplate(@Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null, @Column(unique=true) var clazz: String,
                        @Enumerated(EnumType.STRING) var type: QuestionType,
                        @OneToMany(mappedBy = "questionTemplate") var questions: MutableCollection<Question>?,
                        @ManyToOne @JoinColumn var proficiency: Proficiency,

@@ -8,7 +8,7 @@ import pt.iscte.paddle.model.IVariableExpression
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class WhichVariableHoldsReturn : StaticQuestion<IProcedure, IVariableDeclaration>() {
+class WhichVariableHoldsReturn : StaticQuestion<IProcedure, String>() {
 
 //    override fun question(target: IProcedure) = "Which variable holds the return value of function ${target.signature()}?"
     override fun question(target: IProcedure) = "Que variável tem o valor de retorno da função ${target.signature()}?"
@@ -21,10 +21,10 @@ class WhichVariableHoldsReturn : StaticQuestion<IProcedure, IVariableDeclaration
         return v.areAllReturnsToSameVar()
     }
 
-    override fun answer(target: IProcedure) : IVariableDeclaration {
+    override fun answer(target: IProcedure) : String {
         val v = FindVarsReturn()
         target.accept(v)
-        return v.getVar()
+        return v.getVar().toString()
     }
 
     class FindVarsReturn : IBlock.IVisitor {
