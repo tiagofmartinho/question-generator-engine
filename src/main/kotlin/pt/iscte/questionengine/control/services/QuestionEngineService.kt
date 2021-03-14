@@ -1,5 +1,6 @@
 package pt.iscte.questionengine.control.services
 
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import pt.iscte.paddle.interpreter.IMachine
 import pt.iscte.paddle.interpreter.IProgramState
@@ -21,6 +22,7 @@ class QuestionEngineService(private val userService: UserService,
                             private val languageService: LanguageService,
                             private val proficiencyService: ProficiencyService) {
 
+    private val logger = KotlinLogging.logger {}
     val staticQuestions = QuestionUtils.getStaticQuestions()
     val dynamicQuestions = QuestionUtils.getDynamicQuestions()
 
@@ -57,9 +59,12 @@ class QuestionEngineService(private val userService: UserService,
         val vMachine = IMachine.create(module)
         val questions = mutableSetOf<Question>()
         for(procedure in module.procedures) {
+            logger.debug { "generationg static questions for procedure: $procedure" }
             questions.addAll(generateStaticQuestions(procedure, codeSubmission, language))
+            logger.debug { "generationg dynamic questions for procedure: $procedure" }
             questions.addAll(generateDynamicQuestions(procedure, vMachine, codeSubmission, language))
         }
+        logger.debug { "got all questions!" }
         return questions
     }
 
