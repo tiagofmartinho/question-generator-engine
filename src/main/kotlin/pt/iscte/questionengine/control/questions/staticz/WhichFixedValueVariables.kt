@@ -35,7 +35,7 @@ class WhichFixedValueVariables : StaticQuestion<IProcedure, Collection<String>>(
     private fun getFixedValueVariables(map: Map<String, Int>, parameters: MutableList<IVariableDeclaration>): Collection<String> {
         val result = map.keys.toMutableSet()
         for (param in parameters) {
-            if (!map.contains(param.id)) {
+            if (!map.contains(param.id) && param.id != "this") {
                 result.add(param.id)
             } else {
                 result.remove(param.id)

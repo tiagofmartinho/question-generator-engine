@@ -8,12 +8,12 @@ import pt.iscte.questionengine.entity.ProficiencyLevel
 class HowManyVariables : StaticQuestion<IProcedure, Int>() {
 
 //    override fun question(target: IProcedure) = "How many variables does the function ${target.signature()} have?"
-    override fun question(target: IProcedure) = "Quantas variáveis tem a função ${target.signature()}?"
-    override fun applicableTo(target: IProcedure) = true
+    override fun question(target: IProcedure) = "Quantas variáveis (não incluindo parâmetros) tem a função ${target.signature()}?"
+    override fun applicableTo(target: IProcedure) = this.answer(target) > 0
     override fun answer(target: IProcedure): Int {
         val v = VariableDeclarationVisitor()
         target.accept(v)
-        return v.variables.size + target.parameters.size
+        return v.variables.size
     }
-    override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.B
+    override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.C
 }

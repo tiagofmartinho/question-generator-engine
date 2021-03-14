@@ -1,11 +1,8 @@
 package pt.iscte.questionengine.boundary
 
 import com.google.googlejavaformat.java.Formatter
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.MediaType
+import org.springframework.web.bind.annotation.*
 import pt.iscte.questionengine.control.services.QuestionEngineService
 import pt.iscte.questionengine.exceptions.InvalidCodeException
 import pt.iscte.questionengine.model.AnswerInteraction
@@ -31,4 +28,7 @@ class QuestionEngineResource(val service: QuestionEngineService) {
     fun submitAnswer(@RequestBody answerInteraction: AnswerInteraction): Map<Long, String> {
         return service.getCorrectAnswers(answerInteraction)
     }
+
+    @GetMapping("wakeup", produces = ["text/plain"])
+    fun wakeup() = "I'm awake!"
 }

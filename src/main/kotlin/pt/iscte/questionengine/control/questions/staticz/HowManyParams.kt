@@ -8,6 +8,8 @@ class HowManyParams : StaticQuestion<IProcedure, Int>() {
 //    override fun question(target: IProcedure) = "How many parameters does procedure ${target.signature()} have?"
     override fun question(target: IProcedure) = "Quantos parâmetros tem a função ${target.signature()}?"
     override fun applicableTo(target: IProcedure) = this.answer(target) > 0
-    override fun answer(target: IProcedure): Int = target.parameters.size
+    override fun answer(target: IProcedure): Int {
+        return target.parameters.filter { it.id != "this" }.size
+    }
     override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.C
 }
