@@ -2,6 +2,7 @@ package pt.iscte.questionengine.control.services
 
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import pt.iscte.paddle.interpreter.IMachine
 import pt.iscte.paddle.interpreter.IProgramState
 import pt.iscte.paddle.model.IProcedure
@@ -110,7 +111,8 @@ class QuestionEngineService(private val userService: UserService,
         return questions
     }
 
-    private fun saveCodeSubmission(code: String, user: User): CodeSubmission {
+    @Transactional
+    fun saveCodeSubmission(code: String, user: User): CodeSubmission {
         return codeSubmissionRepository.save(CodeSubmission(null, user, code, null))
     }
 }
