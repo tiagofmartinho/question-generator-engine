@@ -6,7 +6,6 @@ import org.springframework.transaction.annotation.Transactional
 import pt.iscte.paddle.interpreter.IMachine
 import pt.iscte.paddle.interpreter.IProgramState
 import pt.iscte.paddle.model.IProcedure
-import pt.iscte.questionengine.control.questions.staticz.StaticQuestion
 import pt.iscte.questionengine.control.repositories.*
 import pt.iscte.questionengine.control.utils.PaddleUtils
 import pt.iscte.questionengine.control.utils.QuestionUtils
@@ -27,15 +26,17 @@ class QuestionEngineService(private val userService: UserService,
     val staticQuestions = QuestionUtils.getStaticQuestions()
     val dynamicQuestions = QuestionUtils.getDynamicQuestions()
 
+    @Transactional
     fun getQuestions(codeSubmissionModel: CodeSubmissionModel): CodeSubmissionResponse {
         val user = userService.getUser(codeSubmissionModel.user)
         val language = languageService.getLanguage(enumValueOf(codeSubmissionModel.languageCode.toUpperCase()))
         val codeSubmission = saveCodeSubmission(codeSubmissionModel.code, user)
         val questions = generateQuestions(codeSubmission, language)
         val questionModels = questions.stream().map { QuestionModel(it.id, it.question, it.questionTemplate.returnType) }.toList()
-        return CodeSubmissionResponse(questionModels, user.id)
+        return CodeSubmissionResponse(questionModels, codeSubmission.content, user.id)
     }
 
+    @Transactional
     fun getCorrectAnswers(answerInteraction: AnswerInteraction): Map<Long, String> {
         val questions = questionRepository.findAllById(answerInteraction.questionsAnswers.stream().map { it.question.questionId }.toList())
         val user = userService.getUser(answerInteraction.userId)
@@ -60,9 +61,9 @@ class QuestionEngineService(private val userService: UserService,
         val vMachine = IMachine.create(module)
         val questions = mutableSetOf<Question>()
         for(procedure in module.procedures) {
-            logger.debug { "generationg static questions for procedure: $procedure" }
+            logger.debug { "generating static questions for procedure: $procedure" }
             questions.addAll(generateStaticQuestions(procedure, codeSubmission, language))
-            logger.debug { "generationg dynamic questions for procedure: $procedure" }
+            logger.debug { "generating dynamic questions for procedure: $procedure" }
             questions.addAll(generateDynamicQuestions(procedure, vMachine, codeSubmission, language))
         }
         logger.debug { "got all questions!" }
@@ -111,8 +112,7 @@ class QuestionEngineService(private val userService: UserService,
         return questions
     }
 
-    @Transactional
-    fun saveCodeSubmission(code: String, user: User): CodeSubmission {
+    private fun saveCodeSubmission(code: String, user: User): CodeSubmission {
         return codeSubmissionRepository.save(CodeSubmission(null, user, code, null))
     }
 }

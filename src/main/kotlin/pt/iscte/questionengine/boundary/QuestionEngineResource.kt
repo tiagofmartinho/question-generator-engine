@@ -17,7 +17,7 @@ class QuestionEngineResource(val service: QuestionEngineService) {
     @PostMapping("code")
     fun submitCode(@RequestBody codeSubmissionModel: CodeSubmissionModel): CodeSubmissionResponse {
         try {
-            Formatter().formatSource(codeSubmissionModel.code);
+            codeSubmissionModel.code = Formatter().formatSource(codeSubmissionModel.code)
         } catch (exception: Exception) {
             throw InvalidCodeException()
         }

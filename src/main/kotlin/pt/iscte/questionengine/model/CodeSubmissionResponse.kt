@@ -1,3 +1,5 @@
 package pt.iscte.questionengine.model
 
-data class CodeSubmissionResponse(val questions: Collection<QuestionModel>, var userId: Long?) {}
+data class CodeSubmissionResponse(val questions: Collection<QuestionModel>,
+                                  val formattedCode: String,
+                                  val userId: Long?) {}
