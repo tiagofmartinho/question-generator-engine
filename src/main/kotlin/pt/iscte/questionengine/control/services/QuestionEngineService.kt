@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional
 import pt.iscte.paddle.interpreter.IMachine
 import pt.iscte.paddle.interpreter.IProgramState
 import pt.iscte.paddle.model.IProcedure
+import pt.iscte.questionengine.control.questions.Question as QuestionInterface
+import pt.iscte.questionengine.entity.Question
 import pt.iscte.questionengine.control.repositories.*
 import pt.iscte.questionengine.control.utils.PaddleUtils
 import pt.iscte.questionengine.control.utils.QuestionUtils
@@ -77,14 +79,16 @@ class QuestionEngineService(private val userService: UserService,
             .forEach {
                 var questionTemplate = questionTemplateRepository
                     .findQuestionTemplateByClazz(it::class::simpleName.get().toString())
-                if (questionTemplate == null) {
-                    val returnType = QuestionUtils.getReturnTypeOfAnswer(it::class)
-                    questionTemplate = questionTemplateRepository
-                        .save(QuestionTemplate(null, it::class::simpleName.get().toString(), QuestionType.STATIC, null,
-                            proficiencyService.getProficiency(it.proficiencyLevel()), returnType.toUpperCase()))
-                }
-                val question = questionRepository.save(Question(null, questionTemplate, codeSubmission, language,null,
-                    it.question(procedure), it.answer(procedure).toString()))
+                if (questionTemplate == null) questionTemplate = saveQuestionTemplate(it, QuestionType.STATIC)
+                val question = questionRepository.save(Question(
+                    null,
+                    questionTemplate,
+                    codeSubmission,
+                    language,
+                    null,
+                    it.question(procedure),
+                    it.answer(procedure).toString()
+                ))
                 questions.add(question)
             }
         return questions
@@ -98,18 +102,26 @@ class QuestionEngineService(private val userService: UserService,
             if (it.applicableTo(procedure, answer)) {
                 var questionTemplate = questionTemplateRepository
                     .findQuestionTemplateByClazz(it::class::simpleName.get().toString())
-                if (questionTemplate == null) {
-                    val returnType = QuestionUtils.getReturnTypeOfAnswer(it::class)
-                    questionTemplate = questionTemplateRepository
-                        .save(QuestionTemplate(null, it::class::simpleName.get().toString(), QuestionType.DYNAMIC, null,
-                            proficiencyService.getProficiency(it.proficiencyLevel()), returnType.toUpperCase()))
-                }
-                val question = questionRepository.save(Question(null, questionTemplate, codeSubmission, language, null,
-                    it.question(procedure, args), answer.toString()))
+                if (questionTemplate == null) questionTemplate = saveQuestionTemplate(it, QuestionType.DYNAMIC);
+                val question = questionRepository.save(Question(
+                    null,
+                    questionTemplate,
+                    codeSubmission,
+                    language,
+                    null,
+                    it.question(procedure, args),
+                    answer.toString()
+                ))
                 questions.add(question)
             }
         }
         return questions
+    }
+
+    private fun saveQuestionTemplate(question: QuestionInterface, questionType: QuestionType): QuestionTemplate {
+        return questionTemplateRepository.save(
+                QuestionTemplate(null, question::class::simpleName.get().toString(), questionType, null,
+                proficiencyService.getProficiency(question.proficiencyLevel()), QuestionUtils.getReturnTypeOfAnswer(question::class).toUpperCase()));
     }
 
     private fun saveCodeSubmission(code: String, user: User): CodeSubmission {

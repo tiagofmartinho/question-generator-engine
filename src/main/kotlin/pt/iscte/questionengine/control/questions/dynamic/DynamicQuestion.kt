@@ -3,6 +3,7 @@ package pt.iscte.questionengine.control.questions.dynamic
 import pt.iscte.paddle.interpreter.IProgramState
 import pt.iscte.paddle.model.IProcedure
 import pt.iscte.paddle.model.IProgramElement
+import pt.iscte.questionengine.control.questions.Question
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
 /**
@@ -12,10 +13,9 @@ import pt.iscte.questionengine.entity.ProficiencyLevel
     @param STATE virtual machine state to run the code
  **/
 
-abstract class DynamicQuestion<in TARGET: IProcedure, STATE: IProgramState, ANSWER>  {
+abstract class DynamicQuestion<in TARGET: IProcedure, STATE: IProgramState, ANSWER> : Question  {
 
     abstract fun question(target: TARGET, args: Array<Any>): String
     abstract fun applicableTo(target: TARGET, answer: Any): Boolean
     abstract fun answer(target: TARGET, state: STATE, args: Array<Any>): ANSWER
-    abstract fun proficiencyLevel() : ProficiencyLevel
 }
