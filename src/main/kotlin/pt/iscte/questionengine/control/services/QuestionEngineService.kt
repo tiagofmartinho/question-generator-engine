@@ -1,39 +1,34 @@
 package pt.iscte.questionengine.control.services
 
-import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import pt.iscte.paddle.interpreter.IMachine
-import pt.iscte.paddle.interpreter.IProgramState
-import pt.iscte.paddle.model.IProcedure
-import pt.iscte.questionengine.control.questions.Question as QuestionInterface
-import pt.iscte.questionengine.entity.Question
-import pt.iscte.questionengine.control.repositories.*
-import pt.iscte.questionengine.control.utils.PaddleUtils
-import pt.iscte.questionengine.control.utils.QuestionUtils
-import pt.iscte.questionengine.entity.*
-import pt.iscte.questionengine.model.*
+import pt.iscte.questionengine.control.repositories.AnswerSubmissionRepository
+import pt.iscte.questionengine.control.repositories.CodeSubmissionRepository
+import pt.iscte.questionengine.control.repositories.QuestionRepository
+import pt.iscte.questionengine.entity.AnswerSubmission
+import pt.iscte.questionengine.entity.CodeSubmission
+import pt.iscte.questionengine.entity.User
+import pt.iscte.questionengine.model.AnswerInteraction
+import pt.iscte.questionengine.model.CodeSubmissionModel
+import pt.iscte.questionengine.model.CodeSubmissionResponse
+import pt.iscte.questionengine.model.QuestionModel
 import kotlin.streams.toList
 
 @Service
 class QuestionEngineService(private val userService: UserService,
                             private val codeSubmissionRepository: CodeSubmissionRepository,
-                            private val questionTemplateRepository: QuestionTemplateRepository,
                             private val questionRepository: QuestionRepository,
                             private val answerSubmissionRepository: AnswerSubmissionRepository,
                             private val languageService: LanguageService,
-                            private val proficiencyService: ProficiencyService) {
+                            private val questionGeneratorService: QuestionGeneratorService) {
 
-    private val logger = KotlinLogging.logger {}
-    val staticQuestions = QuestionUtils.getStaticQuestions()
-    val dynamicQuestions = QuestionUtils.getDynamicQuestions()
 
     @Transactional
     fun getQuestions(codeSubmissionModel: CodeSubmissionModel): CodeSubmissionResponse {
         val user = userService.getUser(codeSubmissionModel.user)
         val language = languageService.getLanguage(enumValueOf(codeSubmissionModel.languageCode.toUpperCase()))
         val codeSubmission = saveCodeSubmission(codeSubmissionModel.code, user)
-        val questions = generateQuestions(codeSubmission, language)
+        val questions = questionGeneratorService.generateQuestions(codeSubmission, language)
         val questionModels = questions.stream().map { QuestionModel(it.id, it.question, it.questionTemplate.returnType) }.toList()
         return CodeSubmissionResponse(questionModels, codeSubmission.content, user.id)
     }
@@ -58,73 +53,8 @@ class QuestionEngineService(private val userService: UserService,
         return questionCorrectAnswerMap
     }
 
-    private fun generateQuestions(codeSubmission: CodeSubmission, language: Language): Collection<Question> {
-        val module = PaddleUtils.loadCode(codeSubmission.content)
-        val vMachine = IMachine.create(module)
-        val questions = mutableSetOf<Question>()
-        for(procedure in module.procedures) {
-            logger.debug { "generating static questions for procedure: $procedure" }
-            questions.addAll(generateStaticQuestions(procedure, codeSubmission, language))
-            logger.debug { "generating dynamic questions for procedure: $procedure" }
-            questions.addAll(generateDynamicQuestions(procedure, vMachine, codeSubmission, language))
-        }
-        logger.debug { "got all questions!" }
-        return questions
-    }
-
-    private fun generateStaticQuestions(procedure: IProcedure, codeSubmission: CodeSubmission, language: Language): Collection<Question> {
-        val questions = mutableSetOf<Question>()
-        staticQuestions
-            .filter { it.applicableTo(procedure) }
-            .forEach {
-                var questionTemplate = questionTemplateRepository
-                    .findQuestionTemplateByClazz(it::class::simpleName.get().toString())
-                if (questionTemplate == null) questionTemplate = saveQuestionTemplate(it, QuestionType.STATIC)
-                val question = questionRepository.save(Question(
-                    null,
-                    questionTemplate,
-                    codeSubmission,
-                    language,
-                    null,
-                    it.question(procedure),
-                    it.answer(procedure).toString()
-                ))
-                questions.add(question)
-            }
-        return questions
-    }
-
-    private fun generateDynamicQuestions(procedure: IProcedure, state: IProgramState, codeSubmission: CodeSubmission, language: Language): Collection<Question> {
-        val questions = mutableSetOf<Question>()
-        dynamicQuestions.forEach {
-            val args = QuestionUtils.generateValuesForParams(procedure.parameters, state)
-            val answer = it.answer(procedure, state, args)
-            if (it.applicableTo(procedure, answer)) {
-                var questionTemplate = questionTemplateRepository
-                    .findQuestionTemplateByClazz(it::class::simpleName.get().toString())
-                if (questionTemplate == null) questionTemplate = saveQuestionTemplate(it, QuestionType.DYNAMIC);
-                val question = questionRepository.save(Question(
-                    null,
-                    questionTemplate,
-                    codeSubmission,
-                    language,
-                    null,
-                    it.question(procedure, args),
-                    answer.toString()
-                ))
-                questions.add(question)
-            }
-        }
-        return questions
-    }
-
-    private fun saveQuestionTemplate(question: QuestionInterface, questionType: QuestionType): QuestionTemplate {
-        return questionTemplateRepository.save(
-                QuestionTemplate(null, question::class::simpleName.get().toString(), questionType, null,
-                proficiencyService.getProficiency(question.proficiencyLevel()), QuestionUtils.getReturnTypeOfAnswer(question::class).toUpperCase()));
-    }
-
     private fun saveCodeSubmission(code: String, user: User): CodeSubmission {
         return codeSubmissionRepository.save(CodeSubmission(null, user, code, null))
     }
+
 }
