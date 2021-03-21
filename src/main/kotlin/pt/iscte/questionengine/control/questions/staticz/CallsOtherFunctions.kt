@@ -5,10 +5,14 @@ import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.control.visitors.ProcedureCallVisitor
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
+/**
+ * TODO chamadas não são contadas se ocorrem no return ou num assignment
+ */
 class CallsOtherFunctions : StaticQuestion<IProcedure, Boolean>() {
 
 //    override fun question(target: IProcedure) = "Does the function ${target.signature()} depend on other functions?"
-    override fun question(target: IProcedure) = "A função ${target.signature()} depende de outras funções?"
+    override fun question(target: IProcedure) = "A função ${target.signature()} depende de outras funções? " +
+        "Ignora a chamada a outras funções caso estas ocorram no \"return\"."
     override fun applicableTo(target: IProcedure) = true
     override fun answer(target: IProcedure) : Boolean {
         val v = ProcedureCallVisitor()

@@ -8,6 +8,7 @@ public class TestData {
     }
 
     static int sum(int[] a) {
+        int x = 3;
         int s = 0;
         int i = 0;
         while(i < a.length) {
@@ -27,4 +28,24 @@ public class TestData {
         }
         return c;
     }
+
+    static int calls1Function() {
+        sum(new int[]{1,2});
+        return 3;
+    }
+
+    static int calls2Functions() {
+        sum(new int[]{1,2});
+        fact(3);
+        return 3;
+    }
+
+    static int methodWithVariable() {
+        int i = 3;
+        return i;
+    }
+
+
+
+
 }
