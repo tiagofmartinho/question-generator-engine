@@ -59,7 +59,7 @@ class QuestionUtils {
                 WhichFunctions(), WhichParams(), WhichVariableHoldsReturn(), WhichFixedValueVariables(), WhichVariables())
         }
 
-        fun getDynamicQuestions(): Set<DynamicQuestion<IProcedure, IProgramState,out Any>> {
+        fun getDynamicQuestions(): Set<DynamicQuestion<IProcedure, IProgramState, Any>> {
             return setOf(HowDeepCallStack(), HowManyMethodsCalled(), WhatIsTheReturnValue())
         }
 

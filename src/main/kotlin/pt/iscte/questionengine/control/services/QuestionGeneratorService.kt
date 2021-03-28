@@ -9,6 +9,8 @@ import pt.iscte.questionengine.control.questions.dynamic.DynamicQuestion
 import pt.iscte.questionengine.control.questions.staticz.StaticQuestion
 import pt.iscte.questionengine.control.repositories.QuestionRepository
 import pt.iscte.questionengine.control.repositories.QuestionTemplateRepository
+import pt.iscte.questionengine.control.services.computation.DynamicQuestionArgumentsMapping
+import pt.iscte.questionengine.control.services.computation.ProcedureFactsProcessor
 import pt.iscte.questionengine.control.utils.PaddleUtils
 import pt.iscte.questionengine.control.utils.QuestionUtils
 import pt.iscte.questionengine.entity.*
@@ -59,20 +61,20 @@ class QuestionGeneratorService(private val questionTemplateRepository: QuestionT
         return questions
     }
 
-    private fun saveDynamicQuestions(procedureQuestions: Map<IProcedure, Map<DynamicQuestion<IProcedure, IProgramState, out Any>, Array<Any>>>, state: IProgramState, codeSubmission: CodeSubmission, language: Language): Collection<Question> {
+    private fun saveDynamicQuestions(procedureQuestions: Map<IProcedure, Set<DynamicQuestionArgumentsMapping>>, state: IProgramState, codeSubmission: CodeSubmission, language: Language): Collection<Question> {
         val questions = mutableSetOf<Question>()
         procedureQuestions.forEach { entry ->
             entry.value.forEach {
-                var questionTemplate = questionTemplateRepository.findQuestionTemplateByClazz(it.key::class::simpleName.get().toString())
-                if (questionTemplate == null) questionTemplate = saveQuestionTemplate(it.key, QuestionType.DYNAMIC)
+                var questionTemplate = questionTemplateRepository.findQuestionTemplateByClazz(it.question::class::simpleName.get().toString())
+                if (questionTemplate == null) questionTemplate = saveQuestionTemplate(it.question, QuestionType.DYNAMIC)
                 val question = questionRepository.save(Question(
                     null,
                     questionTemplate,
                     codeSubmission,
                     language,
                     null,
-                    it.key.question(entry.key, it.value),
-                    it.key.answer(entry.key, state, it.value).toString()
+                    it.question.question(entry.key, it.args),
+                    it.question.answer(entry.key, state, it.args).toString()
                 ))
                 questions.add(question)
             }
@@ -90,45 +92,39 @@ class QuestionGeneratorService(private val questionTemplateRepository: QuestionT
         val map = mutableMapOf<IProcedure, MutableSet<StaticQuestion<IProcedure, out Any>>>()
         val applicableQuestions = mutableSetOf<StaticQuestion<IProcedure, out Any>>()
         procedures.forEach { procedure ->
-            applicableQuestions.addAll(staticQuestions.filter { it.applicableTo(procedure) }.toSet())
+            applicableQuestions.addAll(staticQuestions.filter { it.applicableTo(procedure) })
             map[procedure] = mutableSetOf()
         }
+
         for (question in applicableQuestions) {
-            var isApplicableToCurrentProcedure = false
-            do  {
-                val proc = procedures.shuffled()[0]
-                if (question.applicableTo(proc)) {
-                    map[proc]!!.add(question)
-                    isApplicableToCurrentProcedure = true
-                }
-            } while (!isApplicableToCurrentProcedure)
+            val proc = procedures.filter { question.applicableTo(it) }.random()
+            map[proc]!!.add(question)
         }
         return map
     }
 
-    private fun generateDynamicQuestions(procedures: Collection<IProcedure>, state: IProgramState): Map<IProcedure, Map<DynamicQuestion<IProcedure, IProgramState, out Any>, Array<Any>>> {
-        val map = mutableMapOf<IProcedure, MutableMap<DynamicQuestion<IProcedure, IProgramState, out Any>, Array<Any>>>()
-        val applicableQuestions = mutableMapOf<DynamicQuestion<IProcedure, IProgramState, out Any>, Array<Any>>()
+    private fun generateDynamicQuestions(procedures: Collection<IProcedure>, state: IProgramState): Map<IProcedure, MutableSet<DynamicQuestionArgumentsMapping>> {
+        val map = mutableMapOf<IProcedure, MutableSet<DynamicQuestionArgumentsMapping>>()
+        val applicableQuestions = mutableSetOf<DynamicQuestionArgumentsMapping>()
         for (procedure in procedures) {
             for (question in dynamicQuestions) {
                 val args = QuestionUtils.generateValuesForParams(procedure.parameters, state)
                 val answer = question.answer(procedure, state, args)
                 if (question.applicableTo(procedure, answer)) {
-                    applicableQuestions[question] = args
+                    applicableQuestions.add(DynamicQuestionArgumentsMapping(question, args))
                 }
             }
-            map[procedure] = mutableMapOf()
+            map[procedure] = mutableSetOf()
         }
-        for (entry in applicableQuestions) {
+        for (question in applicableQuestions) {
             var isApplicableToCurrentProcedure = false
             do  {
-                val proc = procedures.shuffled()[0]
-                val question = entry.key
-                val args = entry.value
-                if (proc.parameters.size == args.size) {
-                    val answer = question.answer(proc, state, args)
-                    if (question.applicableTo(proc, answer)) {
-                        map[proc]!![question] = args
+                val proc = procedures.random()
+                if (proc.parameters.size == question.args.size) {
+                    ProcedureFactsProcessor.processFacts(proc, state, question.args)
+                    val answer = question.question.answer(proc, state, question.args)
+                    if (question.question.applicableTo(proc, answer)) {
+                        map[proc]!!.add(question)
                         isApplicableToCurrentProcedure = true
                     }
                 }

@@ -13,7 +13,7 @@ import pt.iscte.questionengine.entity.ProficiencyLevel
     @param STATE virtual machine state to run the code
  **/
 
-abstract class DynamicQuestion<in TARGET: IProcedure, STATE: IProgramState, ANSWER> : Question  {
+abstract class DynamicQuestion<in TARGET: IProcedure, STATE: IProgramState, out ANSWER> : Question  {
 
     abstract fun question(target: TARGET, args: Array<Any>): String
     abstract fun applicableTo(target: TARGET, answer: Any): Boolean
