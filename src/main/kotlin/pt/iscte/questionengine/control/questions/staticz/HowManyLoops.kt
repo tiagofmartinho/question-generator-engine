@@ -6,9 +6,9 @@ import pt.iscte.paddle.model.IProcedure
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class HowManyLoops : StaticQuestion<IProcedure, Int>() {
+class HowManyLoops : StaticQuestion() {
 
-//    override fun question(target: IProcedure) = "How many cycles does the function ${target.signature()} have?"
+//    override fun question(target: IProcedure) = "How many loops does the function ${target.signature()} have?"
     override fun question(target: IProcedure) = "Quantos ciclos tem a função ${target.signature()}?"
     override fun applicableTo(target: IProcedure) = this.answer(target) > 0
     override fun answer(target: IProcedure): Int {

@@ -1,34 +1,32 @@
 package pt.iscte.questionengine.control.questions.dynamic
 
-import pt.iscte.paddle.interpreter.IProgramState
-import pt.iscte.paddle.model.IProcedure
-import pt.iscte.questionengine.control.utils.QuestionUtils
+import pt.iscte.questionengine.control.services.computation.ElementType
+import pt.iscte.questionengine.control.services.computation.FactType
+import pt.iscte.questionengine.control.services.computation.ProcedureData
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class HowManyMethodsCalled(): DynamicQuestion<IProcedure, IProgramState, Int>() {
+class HowManyMethodsCalled(): DynamicQuestion() {
 
-    override fun question(target: IProcedure, args: Array<Any>): String {
-        val argumentList = QuestionUtils.formatArgumentList(args)
-        return if (argumentList.isNotEmpty()) "Quantas funções são chamadas ao executar a função ${target.signature()} " +
-                "com os argumentos ${argumentList}?"
-        else "Quantas funções são chamadas ao executar a função ${target.signature()} ?"
+    override fun question(target: ProcedureData): String {
+        val paramElements = target.elements.filter { it.type == ElementType.PARAMETER }
+        return if (paramElements.isNotEmpty()) {
+            val args = paramElements.map { it.element }
+            "Quantas funções são chamadas ao executar a função ${target.procedure.signature()} " +
+                    "com os argumentos ${args}?"
+        }
+        else "Quantas funções são chamadas ao executar a função ${target.procedure.signature()} ?"
     }
 
-    override fun applicableTo(target: IProcedure, answer: Any): Boolean {
-        return answer.toString().toInt() > 0
+    override fun answer(target: ProcedureData): Int {
+        return target.facts.first { it.factType == FactType.METHOD_CALLS }.fact as Int
     }
 
-    //TODO
-    override fun answer(target: IProcedure, state: IProgramState, args: Array<Any>): Int {
-        return state.execute(target, *args).totalProcedureCalls - 1
+    override fun applicableTo(target: ProcedureData): Boolean {
+        val methodCalls = target.facts.find { it.factType == FactType.METHOD_CALLS }?.fact
+        return methodCalls != null && methodCalls as Int > 1
     }
 
     override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.B
 }
 
-//    override fun question(): String {
-//        return if (argValues.isNotEmpty()) "How many methods are called from executing $procSignature " +
-//                "with arguments ${argValues.contentToString()}?"
-//        else "How many methods are called from executing $procSignature ?"
-//    }

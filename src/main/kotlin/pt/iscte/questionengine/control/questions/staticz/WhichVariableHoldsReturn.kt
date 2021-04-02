@@ -8,7 +8,7 @@ import pt.iscte.paddle.model.IVariableExpression
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class WhichVariableHoldsReturn : StaticQuestion<IProcedure, String>() {
+class WhichVariableHoldsReturn : StaticQuestion() {
 
 //    override fun question(target: IProcedure) = "Which variable holds the return value of function ${target.signature()}?"
     override fun question(target: IProcedure) = "Que variável tem o valor de retorno da função ${target.signature()}?"

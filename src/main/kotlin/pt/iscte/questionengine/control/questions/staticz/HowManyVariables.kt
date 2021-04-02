@@ -5,7 +5,7 @@ import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.control.visitors.VariableDeclarationVisitor
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class HowManyVariables : StaticQuestion<IProcedure, Int>() {
+class HowManyVariables : StaticQuestion() {
 
 //    override fun question(target: IProcedure) = "How many variables does the function ${target.signature()} have?"
     override fun question(target: IProcedure) = "Quantas variáveis (não incluindo parâmetros) tem a função ${target.signature()}?"
