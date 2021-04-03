@@ -8,7 +8,7 @@ import pt.iscte.questionengine.entity.ProficiencyLevel
 /**
  * TODO chamadas não são contadas se ocorrem no return ou num assignment
  */
-class WhichFunctions : StaticQuestion<IProcedure, Collection<String>>() {
+class WhichFunctions : StaticQuestion() {
 
 //    override fun question(target: IProcedure) = "Which functions does ${target.signature()} depend on?"
     override fun question(target: IProcedure) = "De que funções depende a função ${target.signature()}? " +

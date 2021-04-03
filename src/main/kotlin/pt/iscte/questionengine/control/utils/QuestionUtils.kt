@@ -4,14 +4,11 @@ import pt.iscte.paddle.interpreter.IProgramState
 import pt.iscte.paddle.model.IProcedure
 import pt.iscte.paddle.model.IType
 import pt.iscte.paddle.model.IVariableDeclaration
-import pt.iscte.questionengine.control.questions.dynamic.DynamicQuestion
-import pt.iscte.questionengine.control.questions.dynamic.HowDeepCallStack
-import pt.iscte.questionengine.control.questions.dynamic.HowManyMethodsCalled
-import pt.iscte.questionengine.control.questions.dynamic.WhatIsTheReturnValue
 import pt.iscte.questionengine.control.questions.staticz.*
 import pt.iscte.paddle.interpreter.IReference
 import pt.iscte.paddle.interpreter.IValue
 import pt.iscte.paddle.model.*
+import pt.iscte.questionengine.control.questions.dynamic.*
 import java.lang.UnsupportedOperationException
 import kotlin.random.Random
 import kotlin.reflect.KClass
@@ -23,6 +20,15 @@ class QuestionUtils {
     companion object {
         fun IProcedure.signature(): String {
             return id + "(" + getParameterListWithoutThis(parameters).joinToString (separator = ", ") { it.type.id + " " + it.toString() } + ")"
+        }
+
+        fun getStaticQuestions(): Set<StaticQuestion> {
+            return setOf(CallsOtherFunctions(), HowManyFunctions(), HowManyLoops(), HowManyParams(), HowManyVariables(), IsRecursive(),
+                WhichFunctions(), WhichParams(), WhichVariableHoldsReturn(), WhichFixedValueVariables(), WhichVariables())
+        }
+
+        fun getDynamicQuestions(): Set<DynamicQuestion> {
+            return setOf(HowDeepCallStack(), HowManyMethodsCalled(), WhatIsTheReturnValue(), HowManyVariableAssignments(), WhichVariableValues())
         }
 
         private fun getParameterListWithoutThis(parameters: List<IVariableDeclaration>): List<IVariableDeclaration> {
@@ -52,15 +58,6 @@ class QuestionUtils {
                  }
              }
              return argumentList
-        }
-
-        fun getStaticQuestions(): Set<StaticQuestion<IProcedure, out Any>> {
-            return setOf(CallsOtherFunctions(), HowManyFunctions(), HowManyLoops(), HowManyParams(), HowManyVariables(), IsRecursive(),
-                WhichFunctions(), WhichParams(), WhichVariableHoldsReturn(), WhichFixedValueVariables(), WhichVariables())
-        }
-
-        fun getDynamicQuestions(): Set<DynamicQuestion<IProcedure, IProgramState, Any>> {
-            return setOf(HowDeepCallStack(), HowManyMethodsCalled(), WhatIsTheReturnValue())
         }
 
         private fun generateValueForType(type: IType, state: IProgramState): Any {
@@ -111,15 +108,6 @@ class QuestionUtils {
                 .split(' ')[1]
                 .split('.')
             return returnTypeWithPackages[returnTypeWithPackages.size -1]
-        }
-
-        fun randomString(length: Int): String {
-            val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
-
-            return (1..length)
-                    .map { Random.nextInt(0, charPool.size) }
-                    .map(charPool::get)
-                    .joinToString("")
         }
     }
 }

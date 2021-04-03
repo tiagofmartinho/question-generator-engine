@@ -5,7 +5,7 @@ import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.control.visitors.VariableDeclarationVisitor
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class WhichVariables : StaticQuestion<IProcedure, Collection<String>>() {
+class WhichVariables : StaticQuestion() {
 
 //    override fun question(target: IProcedure): String = "Which variables does the function ${target.signature()} use?"
 

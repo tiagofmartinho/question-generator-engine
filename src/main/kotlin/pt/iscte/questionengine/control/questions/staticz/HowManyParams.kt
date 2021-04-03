@@ -4,7 +4,7 @@ import pt.iscte.paddle.model.IProcedure
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class HowManyParams : StaticQuestion<IProcedure, Int>() {
+class HowManyParams : StaticQuestion() {
 //    override fun question(target: IProcedure) = "How many parameters does procedure ${target.signature()} have?"
     override fun question(target: IProcedure) = "Quantos parâmetros tem a função ${target.signature()}?"
     override fun applicableTo(target: IProcedure) = this.answer(target) > 0

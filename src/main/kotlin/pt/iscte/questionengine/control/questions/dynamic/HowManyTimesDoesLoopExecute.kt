@@ -1,23 +1,24 @@
 package pt.iscte.questionengine.control.questions.dynamic
 
-import pt.iscte.paddle.interpreter.IProgramState
-import pt.iscte.paddle.model.IProcedure
-import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
+import pt.iscte.questionengine.control.services.computation.ProcedureData
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class HowManyTimesDoesLoopExecute(): DynamicQuestion<IProcedure, IProgramState, Int>() {
-
-
-    override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.B
-    override fun question(target: IProcedure, args: Array<Any>): String {
+class HowManyTimesDoesLoopExecute(): DynamicQuestion() {
+    override fun proficiencyLevel(): ProficiencyLevel {
         TODO("Not yet implemented")
     }
 
-    override fun applicableTo(target: IProcedure, answer: Any): Boolean {
+    override fun question(target: ProcedureData): String {
         TODO("Not yet implemented")
     }
 
-    override fun answer(target: IProcedure, state: IProgramState, args: Array<Any>): Int {
+    override fun applicableTo(target: ProcedureData): Boolean {
         TODO("Not yet implemented")
     }
+
+    override fun answer(target: ProcedureData): Int {
+        TODO("Not yet implemented")
+    }
+
+
 }
