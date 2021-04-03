@@ -4,7 +4,7 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "answer_submission", schema = "question_engine")
-class AnswerSubmission(@Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
+data class AnswerSubmission(@Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
                        @OneToOne @JoinColumn var question: Question,
-                       @ManyToOne @JoinColumn var user: User, var answer: String)
+                       @ManyToOne @JoinColumn var user: User, var answer: String) : AuditableEntity()
 {}

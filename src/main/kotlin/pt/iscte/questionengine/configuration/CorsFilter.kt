@@ -1,4 +1,4 @@
-package pt.iscte.questionengine
+package pt.iscte.questionengine.configuration
 
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order

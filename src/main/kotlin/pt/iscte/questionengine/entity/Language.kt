@@ -4,7 +4,6 @@ import javax.persistence.*
 
 @Entity
 @Table(name = "language", schema = "question_engine")
-class Language(@Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
+data class Language(@Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Long? = null,
                @OneToMany(mappedBy = "language") var questions: MutableCollection<Question>?,
-               @Enumerated(EnumType.STRING) var languageCode: LanguageCode)
-{}
+               @Enumerated(EnumType.STRING) var languageCode: LanguageCode) {}
