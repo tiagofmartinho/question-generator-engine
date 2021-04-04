@@ -28,7 +28,7 @@ class QuestionUtils {
         }
 
         fun getDynamicQuestions(): Set<DynamicQuestion> {
-            return setOf(HowDeepCallStack(), HowManyMethodsCalled(), WhatIsTheReturnValue(), HowManyVariableAssignments(), WhichVariableValues())
+            return setOf(HowDeepCallStack(), HowManyMethodCalls(), WhatIsTheReturnValue(), HowManyVariableAssignments(), WhichVariableValues())
         }
 
         private fun getParameterListWithoutThis(parameters: List<IVariableDeclaration>): List<IVariableDeclaration> {

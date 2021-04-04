@@ -6,16 +6,16 @@ import pt.iscte.questionengine.control.services.computation.ProcedureData
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class HowManyMethodsCalled(): DynamicQuestion() {
+class HowManyMethodCalls(): DynamicQuestion() {
 
     override fun question(target: ProcedureData): String {
         val paramElements = target.elements.filter { it.type == ElementType.PARAMETER }
         return if (paramElements.isNotEmpty()) {
             val args = paramElements.map { it.element }
-            "Quantas funções são chamadas ao executar a função ${target.procedure.signature()} " +
+            "Quantas chamadas de funções são feitas ao executar a função ${target.procedure.signature()} " +
                     "com os argumentos ${args}?"
         }
-        else "Quantas funções são chamadas ao executar a função ${target.procedure.signature()} ?"
+        else "Quantas chamadas de funções são feitas ao executar a função ${target.procedure.signature()} ?"
     }
 
     override fun answer(target: ProcedureData): Int {
