@@ -15,7 +15,7 @@ class HowManyVariableAssignments: DynamicQuestion() {
             "Quantas vezes é atribuído um valor à variável ${entry.key} na função ${target.procedure.signature()} " +
                     "com argumentos ${args}?"
         }
-        else "Quantas vezes é atribuída ${entry.key} é assignada na função ${target.procedure.signature()}?"
+        else "Quantas vezes é atribuído um valor à variável ${entry.key} na função ${target.procedure.signature()}?"
     }
 
     override fun answer(target: ProcedureData): Int {

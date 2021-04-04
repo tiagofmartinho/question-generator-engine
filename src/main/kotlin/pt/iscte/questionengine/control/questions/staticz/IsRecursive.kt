@@ -11,7 +11,7 @@ class IsRecursive : StaticQuestion()  {
 
     //this way it's not always asked and helps students understand that something that has loop isn't necessarily recursive
     // and vice-versa
-    override fun applicableTo(target: IProcedure) = HowManyLoops().applicableTo(target)
+    override fun applicableTo(target: IProcedure) = HowManyLoops().applicableTo(target) || target.isRecursive
     override fun answer(target: IProcedure): Boolean = target.isRecursive
     override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.C
 }
