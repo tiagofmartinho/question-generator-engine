@@ -71,7 +71,7 @@ class QuestionUtils {
                 }
                 else -> return when {
                     type is IReferenceType && type.target is IArrayType -> {
-                        val len = Random.nextInt(1, 6)
+                        val len = Random.nextInt(5, 11)
                         val array = state.allocateArray((type.target as IArrayType).componentType, len )
                         for(i in 0 until array.length)
                             array.setElement(i, generateValueForType((type.target as IArrayType).componentType, state) as IValue)
