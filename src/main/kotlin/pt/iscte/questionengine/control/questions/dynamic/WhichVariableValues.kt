@@ -11,9 +11,9 @@ class WhichVariableValues : DynamicQuestion() {
         val entry = target.elements.first { it.type == ElementType.VARIABLE_ASSIGNMENTS }.element as Map.Entry<*, *>
         return if (paramElements.isNotEmpty()) {
             val args = paramElements.map { it.element }
-            "Que valores toma a variável ${entry.key} na função ${target.procedure.signature()} " +
-                    "com argumentos ${args}? Não coloques valores repetidos caso existam atribuições com o mesmo valor."
-        } else "Que valores toma a variável ${entry.key} na função ${target.procedure.signature()}? " +
+            "Que valores toma a variável <b>${entry.key}</b> na função <b>${target.procedure.signature()}</b> " +
+                    "com argumentos <b>${args}</b>? Não coloques valores repetidos caso existam atribuições com o mesmo valor."
+        } else "Que valores toma a variável <b>${entry.key}</b> na função <b>${target.procedure.signature()}</b>? " +
                 "Não coloques valores repetidos caso existam atribuições com o mesmo valor."
     }
 

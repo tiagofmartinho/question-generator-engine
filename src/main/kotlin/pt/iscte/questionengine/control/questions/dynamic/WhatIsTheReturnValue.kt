@@ -13,8 +13,8 @@ class WhatIsTheReturnValue(): DynamicQuestion() {
         val paramElements = target.elements.filter { it.type == ElementType.PARAMETER }
         return if (paramElements.isNotEmpty()) {
             val args = paramElements.map { it.element }
-            "Qual é o valor de retorno da função ${target.procedure.signature()} com argumentos ${args}?"
-        } else "Qual é o valor de retorno da função ${target.procedure.signature()}?"
+            "Qual é o valor de retorno da função <b>${target.procedure.signature()}</b> com argumentos <b>${args}</b>?"
+        } else "Qual é o valor de retorno da função <b>${target.procedure.signature()}</b>?"
     }
 
     override fun answer(target: ProcedureData): Any {

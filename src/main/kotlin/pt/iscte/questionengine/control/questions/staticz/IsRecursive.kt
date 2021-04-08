@@ -7,7 +7,7 @@ import pt.iscte.questionengine.entity.ProficiencyLevel
 class IsRecursive : StaticQuestion()  {
 
 //    override fun question(target: IProcedure) = "Is function ${target.signature()} recursive?"
-    override fun question(target: IProcedure) = "A função ${target.signature()} é recursiva?"
+    override fun question(target: IProcedure) = "A função <b>${target.signature()}</b> é recursiva?"
 
     //this way it's not always asked and helps students understand that something that has loop isn't necessarily recursive
     // and vice-versa

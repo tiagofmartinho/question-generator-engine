@@ -12,10 +12,10 @@ class HowDeepCallStack(): DynamicQuestion() {
         val paramElements = target.elements.filter { it.type == ElementType.PARAMETER }
         return if (paramElements.isNotEmpty()) {
             val args = paramElements.map { it.element }
-            "Qual o nível de profundidade máximo da pilha de chamadas ao executar a função ${target.procedure.signature()} " +
-                    "com argumentos ${args}?"
+            "Qual o nível de profundidade máximo da pilha de chamadas ao executar a função <b>${target.procedure.signature()}</b> " +
+                    "com argumentos <b>${args}</b>?"
         }
-        else "Qual o nível de profundidade máximo da pilha de chamadas ao executar a função ${target.procedure.signature()}?"
+        else "Qual o nível de profundidade máximo da pilha de chamadas ao executar a função <b>${target.procedure.signature()}</b>?"
     }
 
     override fun answer(target: ProcedureData): Int {

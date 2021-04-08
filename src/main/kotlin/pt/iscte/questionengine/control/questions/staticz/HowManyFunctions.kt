@@ -11,7 +11,7 @@ import pt.iscte.questionengine.entity.ProficiencyLevel
 class HowManyFunctions : StaticQuestion() {
 
 //    override fun question(target: IProcedure) = "How many functions does ${target.signature()} depend on?"
-    override fun question(target: IProcedure) = "De quantas funções a função ${target.signature()} depende?" +
+    override fun question(target: IProcedure) = "De quantas funções a função <b>${target.signature()}</b> depende?" +
         "Ignora a chamada a outras funções caso estas ocorram no \"return\"."
     override fun applicableTo(target: IProcedure) = CallsOtherFunctions().answer(target)
     override fun answer(target: IProcedure) : Int {

@@ -12,10 +12,10 @@ class HowManyMethodCalls(): DynamicQuestion() {
         val paramElements = target.elements.filter { it.type == ElementType.PARAMETER }
         return if (paramElements.isNotEmpty()) {
             val args = paramElements.map { it.element }
-            "Quantas chamadas de funções são feitas ao executar a função ${target.procedure.signature()} " +
-                    "com os argumentos ${args}?"
+            "Quantas chamadas de funções são feitas ao executar a função <b>${target.procedure.signature()}</b> " +
+                    "com os argumentos <b>${args}</b>?"
         }
-        else "Quantas chamadas de funções são feitas ao executar a função ${target.procedure.signature()} ?"
+        else "Quantas chamadas de funções são feitas ao executar a função <b>${target.procedure.signature()}</b> ?"
     }
 
     override fun answer(target: ProcedureData): Int {

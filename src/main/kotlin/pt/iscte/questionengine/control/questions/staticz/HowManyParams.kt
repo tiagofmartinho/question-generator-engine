@@ -6,7 +6,7 @@ import pt.iscte.questionengine.entity.ProficiencyLevel
 
 class HowManyParams : StaticQuestion() {
 //    override fun question(target: IProcedure) = "How many parameters does procedure ${target.signature()} have?"
-    override fun question(target: IProcedure) = "Quantos parâmetros tem a função ${target.signature()}?"
+    override fun question(target: IProcedure) = "Quantos parâmetros tem a função <b>${target.signature()}</b>?"
     override fun applicableTo(target: IProcedure) = this.answer(target) > 0
     override fun answer(target: IProcedure): Int {
         return target.parameters.filter { it.id != "this" }.size
