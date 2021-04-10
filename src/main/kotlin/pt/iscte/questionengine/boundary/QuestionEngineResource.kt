@@ -1,7 +1,9 @@
 package pt.iscte.questionengine.boundary
 
 import com.google.googlejavaformat.java.Formatter
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pt.iscte.questionengine.control.services.QuestionEngineService
 import pt.iscte.questionengine.exceptions.InvalidCodeException
@@ -15,18 +17,18 @@ import pt.iscte.questionengine.model.CodeSubmissionResponse
 class QuestionEngineResource(val service: QuestionEngineService) {
 
     @PostMapping("code")
-    fun submitCode(@RequestBody codeSubmissionModel: CodeSubmissionModel): CodeSubmissionResponse {
+    fun submitCode(@RequestBody codeSubmissionModel: CodeSubmissionModel): ResponseEntity<CodeSubmissionResponse> {
         try {
             codeSubmissionModel.code = Formatter().formatSource(codeSubmissionModel.code)
         } catch (exception: Exception) {
-            throw InvalidCodeException()
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
-        return service.getQuestions(codeSubmissionModel)
+        return ResponseEntity.ok(service.getQuestions(codeSubmissionModel))
     }
 
     @PostMapping("answer")
-    fun submitAnswer(@RequestBody answerInteraction: AnswerInteraction): Map<Long, String> {
-        return service.getCorrectAnswers(answerInteraction)
+    fun submitAnswer(@RequestBody answerInteraction: AnswerInteraction): ResponseEntity<Map<Long, String>> {
+        return ResponseEntity.ok(service.getCorrectAnswers(answerInteraction))
     }
 
     @GetMapping("wakeup", produces = ["text/plain"])

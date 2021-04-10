@@ -1,12 +1,14 @@
 package pt.iscte.questionengine.control.questions.dynamic
 
+import pt.iscte.paddle.interpreter.IReference
+import pt.iscte.paddle.model.IArrayType
 import pt.iscte.questionengine.control.services.computation.ElementType
 import pt.iscte.questionengine.control.services.computation.FactType
 import pt.iscte.questionengine.control.services.computation.ProcedureData
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-//TODO doesn't work with chars
+//TODO doesn't work with chars or matrix
 class WhatIsTheReturnValue(): DynamicQuestion() {
 
     override fun question(target: ProcedureData): String {
@@ -18,12 +20,15 @@ class WhatIsTheReturnValue(): DynamicQuestion() {
     }
 
     override fun answer(target: ProcedureData): Any {
-        return target.facts.first { it.factType == FactType.RETURN_VALUE }.fact.toString()
+        val fact =  target.facts.first { it.factType == FactType.RETURN_VALUE }.fact
+        if (fact is IReference && fact.type is IArrayType) return fact.toString().substring(2)
+        return fact.toString()
     }
 
     override fun applicableTo(target: ProcedureData): Boolean {
         val returnValue = target.facts.find { it.factType == FactType.RETURN_VALUE }?.fact
-        return returnValue != null
+        val returnValueString = returnValue?.toString()
+        return returnValueString != null && returnValueString.isBlank() && returnValueString != "null"
     }
 
     override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.A
