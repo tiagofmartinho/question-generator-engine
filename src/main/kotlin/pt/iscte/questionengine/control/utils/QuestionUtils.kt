@@ -22,13 +22,17 @@ class QuestionUtils {
             return id + "(" + getParameterListWithoutThis(parameters).joinToString (separator = ", ") { it.type.id + " " + it.toString() } + ")"
         }
 
-        fun getStaticQuestions(): Set<StaticQuestion> {
+        fun getProcedureQuestions(): Set<ProcedureQuestion> {
             return setOf(CallsOtherFunctions(), HowManyFunctions(), HowManyLoops(), HowManyParams(), HowManyVariables(), IsRecursive(),
                 WhichFunctions(), WhichParams(), WhichVariableHoldsReturn(), WhichFixedValueVariables(), WhichVariables())
         }
 
         fun getDynamicQuestions(): Set<DynamicQuestion> {
             return setOf(HowDeepCallStack(), HowManyMethodCalls(), WhatIsTheReturnValue(), HowManyVariableAssignments(), WhichVariableValues())
+        }
+
+        fun getVariableQuestions(): Set<VariableQuestion> {
+            return setOf(WhatIsTheVariableRole())
         }
 
         private fun getParameterListWithoutThis(parameters: List<IVariableDeclaration>): List<IVariableDeclaration> {

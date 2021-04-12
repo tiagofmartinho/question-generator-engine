@@ -1,10 +1,11 @@
 package pt.iscte.questionengine.control.questions.staticz
 
 import pt.iscte.paddle.model.IProcedure
+import pt.iscte.paddle.model.IProgramElement
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class IsRecursive : StaticQuestion()  {
+class IsRecursive : ProcedureQuestion {
 
 //    override fun question(target: IProcedure) = "Is function ${target.signature()} recursive?"
     override fun question(target: IProcedure) = "A função <b>${target.signature()}</b> é recursiva?"

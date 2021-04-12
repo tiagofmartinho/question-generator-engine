@@ -6,7 +6,7 @@ import pt.iscte.questionengine.control.services.computation.ProcedureData
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class HowManyMethodCalls(): DynamicQuestion() {
+class HowManyMethodCalls(): DynamicQuestion {
 
     override fun question(target: ProcedureData): String {
         val paramElements = target.elements.filter { it.type == ElementType.PARAMETER }

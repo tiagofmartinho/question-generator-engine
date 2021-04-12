@@ -1,3 +1,3 @@
 package pt.iscte.questionengine.control.services.computation
 
-enum class ElementType { PARAMETER, VARIABLE_ASSIGNMENTS }
+enum class ElementType { PARAMETER, VARIABLE_ASSIGNMENTS, VARIABLE_ROLE }

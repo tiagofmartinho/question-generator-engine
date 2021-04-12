@@ -1,14 +1,10 @@
 package pt.iscte.questionengine.control.questions.staticz
 
-import pt.iscte.paddle.model.IBlock
-import pt.iscte.paddle.model.IProcedure
-import pt.iscte.paddle.model.IReturn
-import pt.iscte.paddle.model.IVariableDeclaration
-import pt.iscte.paddle.model.IVariableExpression
+import pt.iscte.paddle.model.*
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class WhichVariableHoldsReturn : StaticQuestion() {
+class WhichVariableHoldsReturn : ProcedureQuestion {
 
 //    override fun question(target: IProcedure) = "Which variable holds the return value of function ${target.signature()}?"
     override fun question(target: IProcedure) = "Que variável tem o valor de retorno da função <b>${target.signature()}</b>?"

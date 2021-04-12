@@ -8,11 +8,20 @@ class PaddleUtils {
 
     companion object {
         fun loadCode(path: File): IModule {
-            return Java2Paddle(path).parse()
+            val java2Paddle = Java2Paddle(path)
+            return getModule(java2Paddle)
         }
 
         fun loadCode(code: String): IModule {
-            return Java2Paddle("someModuleId", code).parse()
+            val java2Paddle = Java2Paddle("someModuleId", code)
+            return getModule(java2Paddle)
         }
+
+        private fun getModule(java2Paddle: Java2Paddle): IModule {
+            java2Paddle.loadBuiltInProcedures(Math::class.java)
+            return java2Paddle.parse()
+        }
+
+
     }
 }

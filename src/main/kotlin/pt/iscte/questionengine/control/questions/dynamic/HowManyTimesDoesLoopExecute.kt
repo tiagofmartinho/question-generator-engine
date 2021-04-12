@@ -1,9 +1,10 @@
 package pt.iscte.questionengine.control.questions.dynamic
 
+import pt.iscte.paddle.model.IProgramElement
 import pt.iscte.questionengine.control.services.computation.ProcedureData
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class HowManyTimesDoesLoopExecute(): DynamicQuestion() {
+class HowManyTimesDoesLoopExecute(): DynamicQuestion {
     override fun proficiencyLevel(): ProficiencyLevel {
         TODO("Not yet implemented")
     }

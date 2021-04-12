@@ -1,10 +1,11 @@
 package pt.iscte.questionengine.control.questions.staticz
 
 import pt.iscte.paddle.model.IProcedure
+import pt.iscte.paddle.model.IProgramElement
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class WhichParams : StaticQuestion() {
+class WhichParams : ProcedureQuestion {
 //    override fun question(target: IProcedure) = "Which are the parameters of procedure ${target.signature()}?"
     override fun question(target: IProcedure) = "Quais são os parâmetros da função <b>${target.signature()}</b>?"
     override fun applicableTo(target: IProcedure) = HowManyParams().applicableTo(target)

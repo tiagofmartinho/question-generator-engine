@@ -1,13 +1,10 @@
 package pt.iscte.questionengine.control.questions.staticz
 
-import pt.iscte.paddle.model.IBlock
-import pt.iscte.paddle.model.IProcedure
-import pt.iscte.paddle.model.IVariableAssignment
-import pt.iscte.paddle.model.IVariableDeclaration
+import pt.iscte.paddle.model.*
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class WhichFixedValueVariables : StaticQuestion() {
+class WhichFixedValueVariables : ProcedureQuestion {
 
     // override fun question(target: IProcedure) = "What are the fixed value variables of function ${target.signature()}?"
     override fun question(target: IProcedure) = "Quais são as variáveis de valor fixo da função <b>${target.signature()}</b>?"

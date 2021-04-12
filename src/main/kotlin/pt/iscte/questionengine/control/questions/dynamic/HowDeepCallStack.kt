@@ -6,7 +6,7 @@ import pt.iscte.questionengine.control.services.computation.ProcedureData
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-class HowDeepCallStack(): DynamicQuestion() {
+class HowDeepCallStack(): DynamicQuestion {
 
     override fun question(target: ProcedureData): String {
         val paramElements = target.elements.filter { it.type == ElementType.PARAMETER }
@@ -27,5 +27,5 @@ class HowDeepCallStack(): DynamicQuestion() {
         return callStackDepth != null && callStackDepth as Int > 1
     }
 
-    override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.A
+    override fun proficiencyLevel() = ProficiencyLevel.A
 }
