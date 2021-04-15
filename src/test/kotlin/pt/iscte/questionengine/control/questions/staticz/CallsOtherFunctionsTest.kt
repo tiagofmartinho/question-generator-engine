@@ -14,11 +14,16 @@ class CallsOtherFunctionsTest {
 
     @Test
     fun whenProcedureCallsOtherFunctions_thenAnswerIsTrue() {
-        Assertions.assertEquals(true, callsOtherFunctions.answer(module.procedures[3]))
+        Assertions.assertEquals(true, callsOtherFunctions.answer(module.getProcedure("calls1Function")))
+    }
+
+    @Test
+    fun `function call on expression`() {
+        Assertions.assertEquals(true, callsOtherFunctions.answer(module.getProcedure("callsFunctionReturn")))
     }
 
     @Test
     fun whenProcedureCallsOtherFunctions_thenAnswerIsFalse() {
-        Assertions.assertEquals(false, callsOtherFunctions.answer(module.procedures[0]))
+        Assertions.assertEquals(false, callsOtherFunctions.answer(module.getProcedure("sum")))
     }
 }
