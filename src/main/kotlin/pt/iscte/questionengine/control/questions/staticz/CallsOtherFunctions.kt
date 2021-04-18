@@ -11,9 +11,8 @@ import pt.iscte.questionengine.entity.ProficiencyLevel
  */
 class CallsOtherFunctions : ProcedureQuestion {
 
-//    override fun question(target: IProcedure) = "Does the function ${target.signature()} depend on other functions?"
-    override fun question(target: IProcedure) = "A função <b>${target.signature()}</b> depende de outras funções? "
-    //+ "Ignora a chamada a outras funções caso estas ocorram no \"return\"."
+//    override fun question(target: IProcedure) = "Does the function ${target.id} depend on other functions?"
+    override fun question(target: IProcedure) = "A função <b>${target.id}</b> depende de outras funções?"
     override fun applicableTo(target: IProcedure) = true
     override fun answer(target: IProcedure) : Boolean {
         val v = ProcedureCallVisitor()

@@ -18,8 +18,12 @@ import kotlin.reflect.full.memberFunctions
 class QuestionUtils {
 
     companion object {
-        fun IProcedure.signature(): String {
-            return id + "(" + getParameterListWithoutThis(parameters).joinToString (separator = ", ") { it.type.id + " " + it.toString() } + ")"
+        fun IProcedure.signature(args: List<Any>): String {
+            return "$id(${removeBracketsFromArgsToString(args)})"
+        }
+
+        private fun removeBracketsFromArgsToString(args: List<Any>): String {
+            return args.toString().drop(1).dropLast(1)
         }
 
         fun getProcedureQuestions(): Set<ProcedureQuestion> {
@@ -33,17 +37,6 @@ class QuestionUtils {
 
         fun getVariableQuestions(): Set<VariableQuestion> {
             return setOf(WhatIsTheVariableRole())
-        }
-
-        private fun getParameterListWithoutThis(parameters: List<IVariableDeclaration>): List<IVariableDeclaration> {
-            val params = parameters.toMutableList()
-            if (params.isNotEmpty()) {
-                val firstArgument = params[0]
-                if (firstArgument.toString() == "this") {
-                    params.removeAt(0)
-                }
-            }
-            return params
         }
 
          fun formatArgumentList(args: Array<Any>): List<Any> {
@@ -75,7 +68,7 @@ class QuestionUtils {
                 }
                 else -> return when {
                     type is IReferenceType && type.target is IArrayType -> {
-                        val len = Random.nextInt(5, 11)
+                        val len = Random.nextInt(4, 10)
                         val array = state.allocateArray((type.target as IArrayType).componentType, len )
                         for(i in 0 until array.length)
                             array.setElement(i, generateValueForType((type.target as IArrayType).componentType, state) as IValue)

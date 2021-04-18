@@ -2,7 +2,6 @@ package pt.iscte.questionengine.control.questions.dynamic
 
 import pt.iscte.paddle.interpreter.IReference
 import pt.iscte.paddle.model.IArrayType
-import pt.iscte.paddle.model.IProgramElement
 import pt.iscte.questionengine.control.services.computation.ElementType
 import pt.iscte.questionengine.control.services.computation.FactType
 import pt.iscte.questionengine.control.services.computation.ProcedureData
@@ -16,8 +15,8 @@ class WhatIsTheReturnValue(): DynamicQuestion {
         val paramElements = target.elements.filter { it.type == ElementType.PARAMETER }
         return if (paramElements.isNotEmpty()) {
             val args = paramElements.map { it.element }
-            "Qual é o valor de retorno da função <b>${target.procedure.signature()}</b> com argumentos <b>${args}</b>?"
-        } else "Qual é o valor de retorno da função <b>${target.procedure.signature()}</b>?"
+            "Qual é o valor de retorno da com a invocação <b>${target.procedure.signature(args)}</b>?"
+        } else "Qual é o valor de retorno da função <b>${target.procedure.id}</b>?"
     }
 
     override fun answer(target: ProcedureData): Any {

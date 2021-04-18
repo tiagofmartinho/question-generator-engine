@@ -1,6 +1,5 @@
 package pt.iscte.questionengine.control.questions.dynamic
 
-import pt.iscte.paddle.model.IProgramElement
 import pt.iscte.questionengine.control.services.computation.ElementType
 import pt.iscte.questionengine.control.services.computation.ProcedureData
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
@@ -12,10 +11,10 @@ class WhichVariableValues : DynamicQuestion {
         val entry = target.elements.first { it.type == ElementType.VARIABLE_ASSIGNMENTS }.element as Map.Entry<*, *>
         return if (paramElements.isNotEmpty()) {
             val args = paramElements.map { it.element }
-            "Qual a sequência de valores (ordenada) tomada pela variável <b>${entry.key}</b> na função <b>${target.procedure.signature()}</b> " +
-                    "com argumentos <b>${args}</b>? Inclui valores repetidos se estes existirem."
-        } else "Qual a sequência de valores (ordenada) tomada pela variável <b>${entry.key}</b> na função <b>${target.procedure.signature()}</b>? " +
-                "Inclui valores repetidos se estes existirem."
+            "Qual a sequência de valores (ordenada) tomada pela variável <b>${entry.key}</b> com a invocação <b>${target.procedure.signature(args)}</b>? " +
+                    "Inclui valores repetidos se existirem."
+        } else "Qual a sequência de valores (ordenada) tomada pela variável <b>${entry.key}</b> na função <b>${target.procedure.id}</b>? " +
+                "Inclui valores repetidos se existirem."
     }
 
     override fun answer(target: ProcedureData): List<Any> {

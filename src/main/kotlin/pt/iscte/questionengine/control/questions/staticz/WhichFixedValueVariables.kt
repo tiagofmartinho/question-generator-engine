@@ -6,8 +6,8 @@ import pt.iscte.questionengine.entity.ProficiencyLevel
 
 class WhichFixedValueVariables : ProcedureQuestion {
 
-    // override fun question(target: IProcedure) = "What are the fixed value variables of function ${target.signature()}?"
-    override fun question(target: IProcedure) = "Quais são as variáveis de valor fixo da função <b>${target.signature()}</b>?"
+    // override fun question(target: IProcedure) = "What are the fixed value variables of function ${target.id}?"
+    override fun question(target: IProcedure) = "Quais são as variáveis de valor fixo da função <b>${target.id}</b>?"
     override fun applicableTo(target: IProcedure) = HowManyVariables().answer(target) > 0 && answer(target).isNotEmpty()
     override fun answer(target: IProcedure): Set<String> {
         val v = FindVariables()

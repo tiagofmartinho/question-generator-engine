@@ -1,6 +1,5 @@
 package pt.iscte.questionengine.control.questions.dynamic
 
-import pt.iscte.paddle.model.IProgramElement
 import pt.iscte.questionengine.control.services.computation.ElementType
 import pt.iscte.questionengine.control.services.computation.ProcedureData
 import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
@@ -13,10 +12,9 @@ class HowManyVariableAssignments: DynamicQuestion {
         val entry = target.elements.first { it.type == ElementType.VARIABLE_ASSIGNMENTS }.element as Map.Entry<*, *>
         return if (paramElements.isNotEmpty()) {
             val args = paramElements.map { it.element }
-            "Quantas vezes é atribuído um valor à variável <b>${entry.key}</b> na função <b>${target.procedure.signature()}</b> " +
-                    "com argumentos <b>${args}</b>?"
+            "Quantas vezes é atribuído um valor à variável <b>${entry.key}</b> com a invocação <b>${target.procedure.signature(args)}</b>?"
         }
-        else "Quantas vezes é atribuído um valor à variável <b>${entry.key}</b> na função <b>${target.procedure.signature()}</b>?"
+        else "Quantas vezes é atribuído um valor à variável <b>${entry.key}</b> na função <b>${target.procedure.id}</b>?"
     }
 
     override fun answer(target: ProcedureData): Int {

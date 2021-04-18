@@ -8,8 +8,8 @@ import pt.iscte.questionengine.entity.ProficiencyLevel
 
 class HowManyVariables : ProcedureQuestion {
 
-//    override fun question(target: IProcedure) = "How many variables does the function ${target.signature()} have?"
-    override fun question(target: IProcedure) = "Quantas variáveis (não incluindo parâmetros) tem a função <b>${target.signature()}</b>?"
+//    override fun question(target: IProcedure) = "How many variables does the function ${target.id} have?"
+    override fun question(target: IProcedure) = "Quantas variáveis (não incluindo parâmetros) tem a função <b>${target.id}</b>?"
     override fun applicableTo(target: IProcedure) = this.answer(target) > 0
     override fun answer(target: IProcedure): Int {
         val v = VariableDeclarationVisitor()
