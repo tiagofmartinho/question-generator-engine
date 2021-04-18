@@ -14,16 +14,16 @@ class HowManyVariablesTest {
 
     @Test
     fun whenProcedureHasNoVariables_thenAnswerIs0() {
-        Assertions.assertEquals(0, howManyVariables.answer(module.procedures[3]))
+        Assertions.assertEquals(0, howManyVariables.answer(module.getProcedure("calls1Function")))
     }
 
     @Test
     fun whenProcedureHas1Variable_thenAnswerIs1() {
-        Assertions.assertEquals(1, howManyVariables.answer(module.procedures[5]))
+        Assertions.assertEquals(1, howManyVariables.answer(module.getProcedure("methodWithVariable")))
     }
 
     @Test
-    fun whenProcedureHas2Variables_thenAnswerIs2() {
-        Assertions.assertEquals(2, howManyVariables.answer(module.procedures[1]))
+    fun whenProcedureHas3Variables_thenAnswerIs3() {
+        Assertions.assertEquals(3, howManyVariables.answer(module.getProcedure("sum")))
     }
 }

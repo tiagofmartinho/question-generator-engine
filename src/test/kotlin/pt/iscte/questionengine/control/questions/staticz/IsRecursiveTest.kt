@@ -15,11 +15,11 @@ class IsRecursiveTest {
 
     @Test
     fun whenProcedureIsRecursive_thenAnswerIsTrue() {
-        Assertions.assertEquals(true, isRecursive.answer(module.procedures[0]))
+        Assertions.assertEquals(true, isRecursive.answer(module.getProcedure("fact")))
     }
 
     @Test
     fun whenProcedureIsNotRecursive_thenAnswerIsFalse() {
-        Assertions.assertEquals(false, isRecursive.answer(module.procedures[1]))
+        Assertions.assertEquals(false, isRecursive.answer(module.getProcedure("sum")))
     }
 }

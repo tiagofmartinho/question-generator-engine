@@ -14,11 +14,11 @@ class WhichParamsTest {
 
     @Test
     fun whenProcedureHas1Param_thenAnswerIs1Param() {
-        Assertions.assertEquals(setOf("a"), whichParams.answer(module.procedures[1]))
+        Assertions.assertEquals(setOf("a"), whichParams.answer(module.getProcedure("sum")))
     }
 
     @Test
     fun whenProcedureHas2Params_thenAnswerIs2Params() {
-        Assertions.assertEquals(setOf("a", "n"), whichParams.answer(module.procedures[2]))
+        Assertions.assertEquals(setOf("a", "n"), whichParams.answer(module.getProcedure("count")))
     }
 }

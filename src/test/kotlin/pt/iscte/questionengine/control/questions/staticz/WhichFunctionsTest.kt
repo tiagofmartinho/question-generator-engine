@@ -14,11 +14,11 @@ class WhichFunctionsTest {
 
     @Test
     fun whenProcedureDependsOn1Function_thenAnswerIs1Function() {
-        Assertions.assertEquals(setOf("sum"), whichFunctions.answer(module.procedures[3]))
+        Assertions.assertEquals(setOf("sum"), whichFunctions.answer(module.getProcedure("calls1Function")))
     }
 
     @Test
     fun whenProcedureHas2FixedParams_thenAnswerIs2Variables() {
-        Assertions.assertEquals(setOf("sum", "fact"), whichFunctions.answer(module.procedures[4]))
+        Assertions.assertEquals(setOf("sum", "fact"), whichFunctions.answer(module.getProcedure("calls2Functions")))
     }
 }

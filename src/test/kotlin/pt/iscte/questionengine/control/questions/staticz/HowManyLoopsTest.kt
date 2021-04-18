@@ -14,12 +14,12 @@ class HowManyLoopsTest {
 
     @Test
     fun whenProcedureHasNoLoops_thenAnswerIs0() {
-        Assertions.assertEquals(0, howManyLoops.answer(module.procedures[0]))
+        Assertions.assertEquals(0, howManyLoops.answer(module.getProcedure("fact")))
     }
 
     @Test
     fun whenProcedureHas1Loop_thenAnswerIs1() {
-        Assertions.assertEquals(1, howManyLoops.answer(module.procedures[1]))
+        Assertions.assertEquals(1, howManyLoops.answer(module.getProcedure("sum")))
     }
 
 }

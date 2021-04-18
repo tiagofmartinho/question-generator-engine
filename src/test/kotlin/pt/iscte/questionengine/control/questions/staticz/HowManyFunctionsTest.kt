@@ -15,11 +15,11 @@ class HowManyFunctionsTest {
 
     @Test
     fun whenProcedureCalls1Function_thenAnswerIs1() {
-        Assertions.assertEquals(1, howManyFunctions.answer(module.procedures[3]))
+        Assertions.assertEquals(1, howManyFunctions.answer(module.getProcedure("calls1Function")))
     }
 
     @Test
     fun whenProcedureCalls2Functions_thenAnswerIs2() {
-        Assertions.assertEquals(2, howManyFunctions.answer(module.procedures[4]))
+        Assertions.assertEquals(2, howManyFunctions.answer(module.getProcedure("calls2Functions")))
     }
 }

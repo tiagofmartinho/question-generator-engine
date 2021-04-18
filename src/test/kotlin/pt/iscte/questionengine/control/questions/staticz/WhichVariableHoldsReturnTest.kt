@@ -14,7 +14,7 @@ class WhichVariableHoldsReturnTest {
 
     @Test
     fun whenProcedureHas1VariableThatHoldsReturn_thenAnswerIs1VariableThatHoldsReturn() {
-        Assertions.assertEquals("s", whichVariableHoldsReturn.answer(module.procedures[1]))
+        Assertions.assertEquals("s", whichVariableHoldsReturn.answer(module.getProcedure("sum")))
     }
 
 }

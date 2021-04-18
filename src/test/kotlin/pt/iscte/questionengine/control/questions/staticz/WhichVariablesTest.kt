@@ -14,11 +14,11 @@ class WhichVariablesTest {
 
     @Test
     fun whenProcedureHas0Variables_thenAnswerIsEmptySet() {
-        Assertions.assertEquals(emptySet<String>(), whichVariables.answer(module.procedures[0]))
+        Assertions.assertEquals(emptySet<String>(), whichVariables.answer(module.getProcedure("fact")))
     }
 
     @Test
     fun whenProcedureHas3Variables_thenAnswerIs3Variables() {
-        Assertions.assertEquals(setOf("x", "s", "i"), whichVariables.answer(module.procedures[1]))
+        Assertions.assertEquals(setOf("x", "s", "i"), whichVariables.answer(module.getProcedure("sum")))
     }
 }

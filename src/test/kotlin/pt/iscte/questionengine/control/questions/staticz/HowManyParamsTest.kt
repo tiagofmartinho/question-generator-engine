@@ -13,11 +13,11 @@ class HowManyParamsTest {
 
     @Test
     fun whenProcedureHasNoParams_thenAnswerIs0() {
-        Assertions.assertEquals(0, howManyParams.answer(module.procedures[3]))
+        Assertions.assertEquals(0, howManyParams.answer(module.getProcedure("calls1Function")))
     }
 
     @Test
     fun whenProcedureHas1Param_thenAnswerIs1() {
-        Assertions.assertEquals(1, howManyParams.answer(module.procedures[0]))
+        Assertions.assertEquals(1, howManyParams.answer(module.getProcedure("fact")))
     }
 }

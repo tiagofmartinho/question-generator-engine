@@ -14,12 +14,12 @@ class WhichFixedValueVariablesTest {
 
     @Test
     fun whenProcedureHas1FixedParamAnd1FixedVariable_thenAnswerIs2Variables() {
-        Assertions.assertEquals(setOf("a", "x"), whichFixedValueVariables.answer(module.procedures[1]))
+        Assertions.assertEquals(setOf("a", "x"), whichFixedValueVariables.answer(module.getProcedure("sum")))
     }
 
     @Test
     fun whenProcedureHas2FixedParams_thenAnswerIs2Variables() {
-        Assertions.assertEquals(setOf("a", "n"), whichFixedValueVariables.answer(module.procedures[2]))
+        Assertions.assertEquals(setOf("a", "n"), whichFixedValueVariables.answer(module.getProcedure("count")))
     }
 
 }
