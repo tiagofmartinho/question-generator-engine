@@ -15,7 +15,7 @@ class WhichVariables : ProcedureQuestion {
 
     override fun applicableTo(target: IProcedure): Boolean = HowManyVariables().answer(target) > 0
 
-    override fun answer(target: IProcedure): Collection<String> {
+    override fun answer(target: IProcedure): Set<String> {
         val v = VariableDeclarationVisitor()
         target.accept(v)
         return v.variables.filter { it.id != "this" }.map { it.id }.toSet()

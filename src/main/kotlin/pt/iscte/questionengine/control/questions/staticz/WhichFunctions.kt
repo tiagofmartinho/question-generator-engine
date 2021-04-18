@@ -15,7 +15,7 @@ class WhichFunctions : ProcedureQuestion {
     override fun question(target: IProcedure) = "De que funções depende a função <b>${target.signature()}</b>? " +
         "Usa apenas os nomes das funções para responderes, por exemplo \"func\". Ignora a chamada a outras funções caso estas ocorram no \"return\"."
     override fun applicableTo(target: IProcedure) = CallsOtherFunctions().answer(target)
-    override fun answer(target: IProcedure) : Collection<String> {
+    override fun answer(target: IProcedure) : Set<String> {
         val v = ProcedureCallVisitor()
         target.accept(v)
         return v.procedureCalls.map { it.split(' ')[1].split('(')[0] }.toSet()

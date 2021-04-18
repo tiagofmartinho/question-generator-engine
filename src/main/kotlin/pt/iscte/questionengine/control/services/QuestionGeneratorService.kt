@@ -26,14 +26,13 @@ class QuestionGeneratorService(private val questionPersistenceService: QuestionP
         val module = PaddleUtils.loadCode(codeSubmission.content)
         val vMachine = IMachine.create(module)
         val procedures = module.procedures.filter { !it.isBuiltIn }
-        val questions = mutableSetOf<Question>()
         logger.debug { "generating questions" }
         val procedureQuestions = generateProcedureQuestions(procedures)
         val variableQuestions = generateVariableQuestions(procedures)
         val dynamicQuestions = generateDynamicQuestions(procedures, vMachine)
-        questions.addAll(questionPersistenceService.saveQuestions(procedureQuestions, variableQuestions, dynamicQuestions, codeSubmission, language))
+        val savedQuestions = questionPersistenceService.saveQuestions(procedureQuestions, variableQuestions, dynamicQuestions, codeSubmission, language)
         logger.debug { "generated and saved all questions"}
-        return questions
+        return savedQuestions
     }
 
     private fun generateProcedureQuestions(procedures: Collection<IProcedure>): Map<IProcedure, Set<ProcedureQuestion>> {

@@ -9,6 +9,5 @@ data class Question(@Id @GeneratedValue(strategy = GenerationType.IDENTITY) var 
                @ManyToOne @JoinColumn var codeSubmission: CodeSubmission,
                @ManyToOne @JoinColumn var language: Language,
                @OneToOne var answerSubmission: AnswerSubmission?,
-               var question: String,
-               var correctAnswer: String) : AuditableEntity()
+               var question: String, var correctAnswer: String, var function: String) : AuditableEntity()
 {}

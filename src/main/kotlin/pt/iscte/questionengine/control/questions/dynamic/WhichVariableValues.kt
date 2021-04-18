@@ -12,13 +12,13 @@ class WhichVariableValues : DynamicQuestion {
         val entry = target.elements.first { it.type == ElementType.VARIABLE_ASSIGNMENTS }.element as Map.Entry<*, *>
         return if (paramElements.isNotEmpty()) {
             val args = paramElements.map { it.element }
-            "Que valores toma a variável <b>${entry.key}</b> na função <b>${target.procedure.signature()}</b> " +
-                    "com argumentos <b>${args}</b>? Não coloques valores repetidos caso existam atribuições com o mesmo valor."
-        } else "Que valores toma a variável <b>${entry.key}</b> na função <b>${target.procedure.signature()}</b>? " +
-                "Não coloques valores repetidos caso existam atribuições com o mesmo valor."
+            "Qual a sequência de valores (ordenada) tomada pela variável <b>${entry.key}</b> na função <b>${target.procedure.signature()}</b> " +
+                    "com argumentos <b>${args}</b>? Inclui valores repetidos se estes existirem."
+        } else "Qual a sequência de valores (ordenada) tomada pela variável <b>${entry.key}</b> na função <b>${target.procedure.signature()}</b>? " +
+                "Inclui valores repetidos se estes existirem."
     }
 
-    override fun answer(target: ProcedureData): Collection<Any> {
+    override fun answer(target: ProcedureData): List<Any> {
         val entry = target.elements.first { it.type == ElementType.VARIABLE_ASSIGNMENTS }.element as Map.Entry<*, *>
         return (entry.value as List<*>).filterIsInstance<Any>()
     }

@@ -13,6 +13,7 @@ import pt.iscte.questionengine.control.repositories.QuestionTemplateRepository
 import pt.iscte.questionengine.control.services.computation.ProcedureData
 import pt.iscte.questionengine.control.utils.QuestionUtils
 import pt.iscte.questionengine.entity.*
+import java.security.InvalidParameterException
 
 @Service
 class QuestionPersistenceService(private val questionTemplateRepository: QuestionTemplateRepository,
@@ -30,21 +31,13 @@ class QuestionPersistenceService(private val questionTemplateRepository: Questio
         return questionRepository.saveAll(questions).toSet()
     }
 
-    fun<T : IProgramElement> getStaticQuestionEntities(procedureQuestions: Map<T, Set<StaticQuestion<T>>>, codeSubmission: CodeSubmission, language: Language): Collection<Question> {
+    fun<T : IProgramElement> getStaticQuestionEntities(staticQuestions: Map<T, Set<StaticQuestion<T>>>, codeSubmission: CodeSubmission, language: Language): Collection<Question> {
         val questions = mutableSetOf<Question>()
-        procedureQuestions.forEach { entry ->
+        staticQuestions.forEach { entry ->
             entry.value.forEach {
                 var questionTemplate = questionTemplateRepository.findQuestionTemplateByClazz(it::class::simpleName.get().toString())
                 if (questionTemplate == null) questionTemplate = saveStaticQuestionTemplate(it)
-                val question =
-                    Question(
-                    null,
-                    questionTemplate,
-                    codeSubmission,
-                    language,
-                    null,
-                    it.question(entry.key),
-                    it.answer(entry.key).toString()
+                val question = Question(null, questionTemplate, codeSubmission, language, null, it.question(entry.key), it.answer(entry.key).toString(), getFunctionId(entry.key)
                 )
                 questions.add(question)
             }
@@ -52,28 +45,26 @@ class QuestionPersistenceService(private val questionTemplateRepository: Questio
         return questions
     }
 
-    fun getDynamicQuestionEntities(procedureQuestions: Map<ProcedureData, Set<DynamicQuestion>>, codeSubmission: CodeSubmission, language: Language): Collection<Question> {
+    fun getDynamicQuestionEntities(dynamicQuestions: Map<ProcedureData, Set<DynamicQuestion>>, codeSubmission: CodeSubmission, language: Language): Collection<Question> {
         val questions = mutableSetOf<Question>()
-        procedureQuestions.forEach { entry ->
+        dynamicQuestions.forEach { entry ->
             entry.value.forEach {
                 var questionTemplate = questionTemplateRepository.findQuestionTemplateByClazz(it::class::simpleName.get().toString())
                 if (questionTemplate == null) questionTemplate = saveDynamicQuestionTemplate(it)
-                val question =
-                    Question(
-                    null,
-                    questionTemplate,
-                    codeSubmission,
-                    language,
-                    null,
-                    it.question(entry.key),
-                    it.answer(entry.key).toString()
-                )
+                val question = Question(null, questionTemplate, codeSubmission, language, null, it.question(entry.key), it.answer(entry.key).toString(), entry.key.procedure.id)
                 questions.add(question)
             }
         }
         return questions
     }
 
+    private fun getFunctionId(key: IProgramElement): String {
+        return when (key) {
+            is IProcedure -> key.id
+            is IVariableDeclaration -> key.ownerProcedure.id
+            else -> throw InvalidParameterException()
+        }
+    }
 
     private fun saveStaticQuestionTemplate(question: StaticQuestion<out IProgramElement>): QuestionTemplate {
         return questionTemplateRepository.save(
