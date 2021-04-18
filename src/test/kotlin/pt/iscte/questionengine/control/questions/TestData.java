@@ -45,7 +45,9 @@ public class TestData {
         return i;
     }
 
-
+    static int callsFunctionReturn() {
+        return sum(new int[]{1,2});
+    }
 
 
 }
