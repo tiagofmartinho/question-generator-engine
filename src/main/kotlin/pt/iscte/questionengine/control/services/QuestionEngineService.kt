@@ -48,7 +48,7 @@ class QuestionEngineService(
             val question = questions.find { qa.question.questionId == it.id }
             if (question != null) {
                 questionCorrectAnswerMap[question.id!!] = question.correctAnswer
-                val savedAnswer = answerSubmissionRepository.save(AnswerSubmission(null, question, user, qa.userAnswer))
+                val savedAnswer = answerSubmissionRepository.save(AnswerSubmission(null, question, user, qa.userAnswer, qa.confidenceLevel))
                 question.answerSubmission = savedAnswer
                 questionRepository.save(question)
             }
