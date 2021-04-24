@@ -8,7 +8,7 @@ class HowManyFunctions : ProcedureQuestion {
 
 //    override fun question(target: IProcedure) = "How many functions does ${target.id} depend on?"
     override fun question(target: IProcedure) = "De quantas funções a função <b>${target.id}</b> depende?"
-    override fun applicableTo(target: IProcedure) = CallsOtherFunctions().applicableTo(target) && CallsOtherFunctions().applicableTo(target)
+    override fun applicableTo(target: IProcedure) = CallsOtherFunctions().applicableTo(target) && CallsOtherFunctions().answer(target)
     override fun answer(target: IProcedure) : Int {
         val v = ProcedureCallVisitor()
         target.accept(v)
