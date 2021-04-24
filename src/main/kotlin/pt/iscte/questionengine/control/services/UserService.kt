@@ -4,10 +4,8 @@ import org.springframework.stereotype.Service
 import pt.iscte.questionengine.control.repositories.AnswerSubmissionRepository
 import pt.iscte.questionengine.control.repositories.UserRepository
 import pt.iscte.questionengine.entity.AnswerSubmission
-import pt.iscte.questionengine.entity.Proficiency
 import pt.iscte.questionengine.entity.ProficiencyLevel
 import pt.iscte.questionengine.entity.User
-import pt.iscte.questionengine.exceptions.QuestionEngineException
 import pt.iscte.questionengine.model.UserModel
 
 @Service

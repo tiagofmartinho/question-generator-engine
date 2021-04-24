@@ -1,6 +1,9 @@
 package pt.iscte.questionengine.control.services.computation
 
-import pt.iscte.paddle.interpreter.*
+import pt.iscte.paddle.interpreter.ICallStack
+import pt.iscte.paddle.interpreter.IProgramState
+import pt.iscte.paddle.interpreter.IStackFrame
+import pt.iscte.paddle.interpreter.IValue
 import pt.iscte.paddle.model.IProcedure
 import pt.iscte.paddle.model.IProgramElement
 import pt.iscte.paddle.model.IVariableAssignment

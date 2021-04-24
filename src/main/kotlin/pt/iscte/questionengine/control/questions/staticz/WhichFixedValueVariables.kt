@@ -1,7 +1,9 @@
 package pt.iscte.questionengine.control.questions.staticz
 
-import pt.iscte.paddle.model.*
-import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
+import pt.iscte.paddle.model.IBlock
+import pt.iscte.paddle.model.IProcedure
+import pt.iscte.paddle.model.IVariableAssignment
+import pt.iscte.paddle.model.IVariableDeclaration
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
 class WhichFixedValueVariables : ProcedureQuestion {

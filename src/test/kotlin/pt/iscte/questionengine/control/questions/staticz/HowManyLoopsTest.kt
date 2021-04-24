@@ -13,12 +13,12 @@ class HowManyLoopsTest {
     private var module = PaddleUtils.loadCode(file)
 
     @Test
-    fun whenProcedureHasNoLoops_thenAnswerIs0() {
+    fun `returns 0 if it has no loops`() {
         Assertions.assertEquals(0, howManyLoops.answer(module.getProcedure("fact")))
     }
 
     @Test
-    fun whenProcedureHas1Loop_thenAnswerIs1() {
+    fun `returns 1 if it has 1 loop`() {
         Assertions.assertEquals(1, howManyLoops.answer(module.getProcedure("sum")))
     }
 

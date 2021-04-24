@@ -1,6 +1,7 @@
 package pt.iscte.questionengine.control.visitors
 
-import pt.iscte.paddle.model.*
+import pt.iscte.paddle.model.IBlock
+import pt.iscte.paddle.model.IProcedureCallExpression
 
 class ProcedureCallVisitor : IBlock.IVisitor {
 

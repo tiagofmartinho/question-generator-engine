@@ -13,12 +13,12 @@ class WhichParamsTest {
     private var module = PaddleUtils.loadCode(file)
 
     @Test
-    fun whenProcedureHas1Param_thenAnswerIs1Param() {
+    fun `returns param set with 1 element when it has 1 param`() {
         Assertions.assertEquals(setOf("a"), whichParams.answer(module.getProcedure("sum")))
     }
 
     @Test
-    fun whenProcedureHas2Params_thenAnswerIs2Params() {
+    fun `returns param set with 2 elements when it has 2 params`() {
         Assertions.assertEquals(setOf("a", "n"), whichParams.answer(module.getProcedure("count")))
     }
 }

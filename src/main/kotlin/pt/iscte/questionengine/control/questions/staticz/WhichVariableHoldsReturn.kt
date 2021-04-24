@@ -1,7 +1,6 @@
 package pt.iscte.questionengine.control.questions.staticz
 
 import pt.iscte.paddle.model.*
-import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
 class WhichVariableHoldsReturn : ProcedureQuestion {

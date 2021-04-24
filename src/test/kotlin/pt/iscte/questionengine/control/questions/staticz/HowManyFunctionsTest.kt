@@ -14,12 +14,12 @@ class HowManyFunctionsTest {
 
 
     @Test
-    fun whenProcedureCalls1Function_thenAnswerIs1() {
+    fun `returns 1 when calls 1 function`() {
         Assertions.assertEquals(1, howManyFunctions.answer(module.getProcedure("calls1Function")))
     }
 
     @Test
-    fun whenProcedureCalls2Functions_thenAnswerIs2() {
+    fun `returns 2 when calls 2 functions`() {
         Assertions.assertEquals(2, howManyFunctions.answer(module.getProcedure("calls2Functions")))
     }
 }

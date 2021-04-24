@@ -1,7 +1,6 @@
 package pt.iscte.questionengine.entity
 
 import javax.persistence.*
-import kotlin.reflect.KType
 
 @Entity
 @Table(name = "question_template", schema = "question_engine")

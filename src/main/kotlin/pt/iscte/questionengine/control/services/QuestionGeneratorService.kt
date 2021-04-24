@@ -12,7 +12,9 @@ import pt.iscte.questionengine.control.questions.staticz.VariableQuestion
 import pt.iscte.questionengine.control.services.computation.*
 import pt.iscte.questionengine.control.utils.PaddleUtils
 import pt.iscte.questionengine.control.utils.QuestionUtils
-import pt.iscte.questionengine.entity.*
+import pt.iscte.questionengine.entity.CodeSubmission
+import pt.iscte.questionengine.entity.Language
+import pt.iscte.questionengine.entity.Question
 
 @Service
 class QuestionGeneratorService(private val questionPersistenceService: QuestionPersistenceService) {

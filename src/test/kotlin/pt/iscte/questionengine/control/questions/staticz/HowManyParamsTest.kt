@@ -12,12 +12,12 @@ class HowManyParamsTest {
     private var module = PaddleUtils.loadCode(file)
 
     @Test
-    fun whenProcedureHasNoParams_thenAnswerIs0() {
+    fun `returns 0 if it has no params`() {
         Assertions.assertEquals(0, howManyParams.answer(module.getProcedure("calls1Function")))
     }
 
     @Test
-    fun whenProcedureHas1Param_thenAnswerIs1() {
+    fun `returns 1 if it has 1 param`() {
         Assertions.assertEquals(1, howManyParams.answer(module.getProcedure("fact")))
     }
 }

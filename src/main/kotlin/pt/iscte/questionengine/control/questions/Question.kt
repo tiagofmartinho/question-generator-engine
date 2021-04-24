@@ -1,6 +1,5 @@
 package pt.iscte.questionengine.control.questions
 
-import pt.iscte.paddle.model.IProgramElement
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
 interface Question<T> {

@@ -1,6 +1,5 @@
 package pt.iscte.questionengine.control.questions.dynamic
 
-import pt.iscte.paddle.model.IProgramElement
 import pt.iscte.questionengine.control.services.computation.ProcedureData
 import pt.iscte.questionengine.entity.ProficiencyLevel
 

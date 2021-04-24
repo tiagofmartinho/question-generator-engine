@@ -13,12 +13,12 @@ class WhichFunctionsTest {
     private var module = PaddleUtils.loadCode(file)
 
     @Test
-    fun whenProcedureDependsOn1Function_thenAnswerIs1Function() {
+    fun `returns function set with 1 element when depends on 1 function`() {
         Assertions.assertEquals(setOf("sum"), whichFunctions.answer(module.getProcedure("calls1Function")))
     }
 
     @Test
-    fun whenProcedureHas2FixedParams_thenAnswerIs2Variables() {
+    fun `returns function set with 2 elements when depends on 2 functions`() {
         Assertions.assertEquals(setOf("sum", "fact"), whichFunctions.answer(module.getProcedure("calls2Functions")))
     }
 }

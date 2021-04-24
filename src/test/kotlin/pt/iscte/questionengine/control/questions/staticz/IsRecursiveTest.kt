@@ -14,12 +14,12 @@ class IsRecursiveTest {
     private var module = PaddleUtils.loadCode(file)
 
     @Test
-    fun whenProcedureIsRecursive_thenAnswerIsTrue() {
+    fun `returns true if it is recursive`() {
         Assertions.assertEquals(true, isRecursive.answer(module.getProcedure("fact")))
     }
 
     @Test
-    fun whenProcedureIsNotRecursive_thenAnswerIsFalse() {
+    fun `returns false if it is not recursive`() {
         Assertions.assertEquals(false, isRecursive.answer(module.getProcedure("sum")))
     }
 }

@@ -13,7 +13,7 @@ class CallsOtherFunctionsTest {
     private var module = PaddleUtils.loadCode(file)
 
     @Test
-    fun whenProcedureCallsOtherFunctions_thenAnswerIsTrue() {
+    fun `returns true if it calls other functions`() {
         Assertions.assertEquals(true, callsOtherFunctions.answer(module.getProcedure("calls1Function")))
     }
 
@@ -23,7 +23,7 @@ class CallsOtherFunctionsTest {
     }
 
     @Test
-    fun whenProcedureCallsOtherFunctions_thenAnswerIsFalse() {
+    fun `returns false if it doesn't calls other functions`() {
         Assertions.assertEquals(false, callsOtherFunctions.answer(module.getProcedure("sum")))
     }
 }

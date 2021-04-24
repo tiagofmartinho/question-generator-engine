@@ -13,7 +13,7 @@ class WhichVariableHoldsReturnTest {
     private var module = PaddleUtils.loadCode(file)
 
     @Test
-    fun whenProcedureHas1VariableThatHoldsReturn_thenAnswerIs1VariableThatHoldsReturn() {
+    fun `returns variable that hold the return value`() {
         Assertions.assertEquals("s", whichVariableHoldsReturn.answer(module.getProcedure("sum")))
     }
 

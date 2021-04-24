@@ -3,8 +3,6 @@ package pt.iscte.questionengine.control.questions.staticz
 import pt.iscte.paddle.model.IBlock
 import pt.iscte.paddle.model.ILoop
 import pt.iscte.paddle.model.IProcedure
-import pt.iscte.paddle.model.IProgramElement
-import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
 class HowManyLoops : ProcedureQuestion {

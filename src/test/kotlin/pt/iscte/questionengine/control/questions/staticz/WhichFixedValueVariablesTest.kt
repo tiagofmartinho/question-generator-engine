@@ -13,12 +13,12 @@ class WhichFixedValueVariablesTest {
     private var module = PaddleUtils.loadCode(file)
 
     @Test
-    fun whenProcedureHas1FixedParamAnd1FixedVariable_thenAnswerIs2Variables() {
+    fun `returns 2 when it has 1 fixed param and 1 fixed variable`() {
         Assertions.assertEquals(setOf("a", "x"), whichFixedValueVariables.answer(module.getProcedure("sum")))
     }
 
     @Test
-    fun whenProcedureHas2FixedParams_thenAnswerIs2Variables() {
+    fun `returns 2 when it has 2 fixed params`() {
         Assertions.assertEquals(setOf("a", "n"), whichFixedValueVariables.answer(module.getProcedure("count")))
     }
 

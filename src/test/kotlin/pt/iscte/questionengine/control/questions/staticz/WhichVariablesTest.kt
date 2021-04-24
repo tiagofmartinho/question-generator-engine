@@ -13,12 +13,12 @@ class WhichVariablesTest {
     private var module = PaddleUtils.loadCode(file)
 
     @Test
-    fun whenProcedureHas0Variables_thenAnswerIsEmptySet() {
+    fun `returns empty set when it has no variables`() {
         Assertions.assertEquals(emptySet<String>(), whichVariables.answer(module.getProcedure("fact")))
     }
 
     @Test
-    fun whenProcedureHas3Variables_thenAnswerIs3Variables() {
+    fun `returns set with 3 variables if it has 3 variables`() {
         Assertions.assertEquals(setOf("x", "s", "i"), whichVariables.answer(module.getProcedure("sum")))
     }
 }

@@ -4,7 +4,6 @@ import pt.iscte.paddle.model.IVariableDeclaration
 import pt.iscte.paddle.model.roles.IGatherer
 import pt.iscte.paddle.model.roles.IStepper
 import pt.iscte.paddle.model.roles.IVariableRole
-import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.entity.ProficiencyLevel
 import pt.iscte.questionengine.entity.VariableRole
 import java.security.InvalidParameterException

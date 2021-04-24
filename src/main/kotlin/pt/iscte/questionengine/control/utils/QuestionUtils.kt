@@ -1,15 +1,11 @@
 package pt.iscte.questionengine.control.utils
 
 import pt.iscte.paddle.interpreter.IProgramState
-import pt.iscte.paddle.model.IProcedure
-import pt.iscte.paddle.model.IType
-import pt.iscte.paddle.model.IVariableDeclaration
-import pt.iscte.questionengine.control.questions.staticz.*
 import pt.iscte.paddle.interpreter.IReference
 import pt.iscte.paddle.interpreter.IValue
 import pt.iscte.paddle.model.*
 import pt.iscte.questionengine.control.questions.dynamic.*
-import java.lang.UnsupportedOperationException
+import pt.iscte.questionengine.control.questions.staticz.*
 import kotlin.random.Random
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
