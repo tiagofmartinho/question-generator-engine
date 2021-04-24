@@ -4,10 +4,10 @@ import pt.iscte.paddle.model.*
 
 class ProcedureCallVisitor : IBlock.IVisitor {
 
-    var procedureCalls = mutableSetOf<IProcedureDeclaration>()
+    val procedureCalls = mutableSetOf<String>()
 
-    override fun visit(p: IProcedureCall): Boolean {
-        procedureCalls.add(p.procedure)
+    override fun visit(exp: IProcedureCallExpression): Boolean {
+        procedureCalls.add(exp.procedure.id)
         return true
     }
 

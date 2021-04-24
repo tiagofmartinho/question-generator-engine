@@ -6,9 +6,6 @@ import pt.iscte.questionengine.control.utils.QuestionUtils.Companion.signature
 import pt.iscte.questionengine.control.visitors.ProcedureCallVisitor
 import pt.iscte.questionengine.entity.ProficiencyLevel
 
-/**
- * TODO chamadas não são contadas se ocorrem no return ou num assignment
- */
 class WhichFunctions : ProcedureQuestion {
 
 //    override fun question(target: IProcedure) = "Which functions does ${target.id} depend on?"
@@ -18,7 +15,7 @@ class WhichFunctions : ProcedureQuestion {
     override fun answer(target: IProcedure) : Set<String> {
         val v = ProcedureCallVisitor()
         target.accept(v)
-        return v.procedureCalls.map { it.id }.toSet()
+        return v.procedureCalls
     }
     override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.C
 }
