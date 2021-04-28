@@ -18,7 +18,7 @@ class WhatIsTheReturnValue(): DynamicQuestion {
         } else "Qual é o valor de retorno da função <b>${target.procedure.id}</b>?"
     }
 
-    override fun answer(target: ProcedureData): Any {
+    override fun answer(target: ProcedureData): String {
         val fact =  target.facts.first { it.factType == FactType.RETURN_VALUE }.fact
         if (fact is IReference && fact.type is IArrayType) return fact.toString().substring(2)
         return fact.toString()
@@ -27,7 +27,7 @@ class WhatIsTheReturnValue(): DynamicQuestion {
     override fun applicableTo(target: ProcedureData): Boolean {
         val returnValue = target.facts.find { it.factType == FactType.RETURN_VALUE }?.fact
         val returnValueString = returnValue?.toString()
-        return returnValueString != null && returnValueString.isBlank() && returnValueString != "null"
+        return returnValueString != null && returnValueString.isNotBlank() && returnValueString != "null"
     }
 
     override fun proficiencyLevel(): ProficiencyLevel = ProficiencyLevel.A
