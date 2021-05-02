@@ -25,7 +25,9 @@ class ProcedureFactsProcessor {
             })
             state.addListener(object: IProgramState.IListener {
                 override fun step(currentInstruction: IProgramElement) {
-                    if (currentInstruction is IVariableAssignment && currentInstruction.ownerProcedure == procedure)  {
+                    if (currentInstruction is IVariableAssignment
+                        && currentInstruction.ownerProcedure == procedure
+                        && !currentInstruction.target.type.isArrayReference)  {
                         val ref = state.callStack.topFrame.getVariableStore(currentInstruction.target)
                         val key = currentInstruction.target.id
                         variableAssignments.getOrPut(key, ::mutableListOf) += ref.value as IValue
