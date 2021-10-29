@@ -13,6 +13,8 @@ import pt.iscte.questionengine.repositories.AnswerSubmissionRepository
 import pt.iscte.questionengine.repositories.CodeSubmissionRepository
 import pt.iscte.questionengine.repositories.QuestionRepository
 import pt.iscte.questionengine.entities.SubmissionCode
+import java.util.*
+import kotlin.streams.toList
 
 @Service
 class QuestionEngineService(
@@ -28,12 +30,12 @@ class QuestionEngineService(
     @Transactional
     fun getQuestions(codeSubmissionModel: CodeSubmissionModel): CodeSubmissionResponse {
         val user = userService.getUser(codeSubmissionModel.user)
-        val language = languageService.getLanguage(enumValueOf(codeSubmissionModel.languageCode.toUpperCase()))
+        val language = languageService.getLanguage(enumValueOf(codeSubmissionModel.languageCode.uppercase(Locale.getDefault())))
         val codeSubmission = saveCodeSubmission(codeSubmissionModel.code, user)
         val questions = questionGeneratorService.generateQuestions(codeSubmission, language)
         val questionModels =
             questions.stream().map { QuestionModel(it.id, it.question, it.questionTemplate.returnType, it.function) }
-                .toList().sortedBy { it.function }
+                .toList<QuestionModel>().sortedBy { it.function }
         return CodeSubmissionResponse(questionModels, codeSubmission.content, user.id)
     }
 
