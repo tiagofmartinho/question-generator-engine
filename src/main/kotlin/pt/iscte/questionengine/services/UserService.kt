@@ -3,7 +3,10 @@ package pt.iscte.questionengine.services
 import org.springframework.stereotype.Service
 import pt.iscte.questionengine.entities.AnswerSubmission
 import pt.iscte.questionengine.entities.ProficiencyLevel
+import pt.iscte.questionengine.entities.SubmissionCode
 import pt.iscte.questionengine.entities.User
+import pt.iscte.questionengine.exceptions.DuplicateCodeSubmissionException
+import pt.iscte.questionengine.exceptions.QuestionEngineException
 import pt.iscte.questionengine.models.UserModel
 import pt.iscte.questionengine.repositories.AnswerSubmissionRepository
 import pt.iscte.questionengine.repositories.UserRepository
@@ -25,11 +28,17 @@ class UserService(private val userRepository: UserRepository,
     }
 
     fun getUser(userModel: UserModel): User {
-        return userRepository.findUserByEmail(userModel.email) ?:
-        return userRepository.save(
-            User(userModel.firstName, userModel.lastName, userModel.email, proficiencyService.getProficiency(
-                ProficiencyLevel.C))
-        )
+//        return userRepository.findUserByEmail(userModel.email)
+        val student = userRepository.findUserByStudentNumber(userModel.studentNumber)
+            ?: return userRepository.save(
+                User(userModel.firstName, userModel.lastName, userModel.email, userModel.studentNumber, proficiencyService.getProficiency(
+                    ProficiencyLevel.C))
+            )
+        if (!student.codeSubmissions.isNullOrEmpty() && student.codeSubmissions!!.any { codeSubmission -> codeSubmission.submissionCode == SubmissionCode.S11 }) {
+            throw DuplicateCodeSubmissionException()
+        }
+
+        return student
     }
 
     private fun getUserCorrectAnswersRatio(userAnswers: Collection<AnswerSubmission>): Float {

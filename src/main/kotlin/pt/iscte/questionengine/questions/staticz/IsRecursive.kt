@@ -5,8 +5,8 @@ import pt.iscte.questionengine.entities.ProficiencyLevel
 
 class IsRecursive : ProcedureQuestion {
 
-    override fun question(target: IProcedure) = "Is function <b>${target.id}</b> recursive?"
-//    override fun question(target: IProcedure) = "A função <b>${target.id}</b> é recursiva?"
+//    override fun question(target: IProcedure) = "Is function <b>${target.id}</b> recursive?"
+    override fun question(target: IProcedure) = "A função <b>${target.id}</b> é recursiva?"
 
     //this way it's not always asked and helps students understand that something that has loop isn't necessarily recursive
     // and vice-versa

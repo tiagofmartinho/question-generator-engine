@@ -7,8 +7,8 @@ import pt.iscte.questionengine.entities.ProficiencyLevel
 
 class HowManyLoops : ProcedureQuestion {
 
-    override fun question(target: IProcedure) = "How many loops does function <b>${target.id}</b> have?"
-//    override fun question(target: IProcedure) = "Quantos ciclos tem a função <b>${target.id}</b>?"
+//    override fun question(target: IProcedure) = "How many loops does function <b>${target.id}</b> have?"
+    override fun question(target: IProcedure) = "Quantos ciclos tem a função <b>${target.id}</b>?"
     override fun applicableTo(target: IProcedure) = this.answer(target) > 0
     override fun answer(target: IProcedure): Int {
         val v = FindLoopCount()

@@ -6,8 +6,8 @@ import pt.iscte.questionengine.visitors.VariableDeclarationVisitor
 
 class HowManyVariables : ProcedureQuestion {
 
-    override fun question(target: IProcedure) = "How many variables (not including parameters) does function <b>${target.id}</b> have?"
-//    override fun question(target: IProcedure) = "Quantas variáveis (não incluindo parâmetros) tem a função <b>${target.id}</b>?"
+//    override fun question(target: IProcedure) = "How many variables (not including parameters) does function <b>${target.id}</b> have?"
+    override fun question(target: IProcedure) = "Quantas variáveis (não incluindo parâmetros) tem a função <b>${target.id}</b>?"
     override fun applicableTo(target: IProcedure) = this.answer(target) > 0
     override fun answer(target: IProcedure): Int {
         val v = VariableDeclarationVisitor()

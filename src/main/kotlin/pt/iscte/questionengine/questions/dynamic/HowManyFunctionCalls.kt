@@ -12,12 +12,12 @@ class HowManyFunctionCalls(): DynamicQuestion {
         val paramElements = target.elements.filter { it.type == ElementType.PARAMETER }
         return if (paramElements.isNotEmpty()) {
             val args = paramElements.map { it.element }
-//            "Quantas chamadas de funções são feitas com a invocação <b>${target.procedure.signature(args)}</b>?"
-            "How many function calls are made with the following invocation: <b>${target.procedure.signature(args)}</b>?"
+            "Quantas chamadas de funções são feitas com a invocação <b>${target.procedure.signature(args)}</b>?"
+//            "How many function calls are made with the following invocation: <b>${target.procedure.signature(args)}</b>?"
         }
         else
-//            "Quantas chamadas de funções são feitas ao executar a função <b>${target.procedure.id}</b>?"
-            "How many function calls are made from executing function <b>${target.procedure.id}</b>?"
+            "Quantas chamadas de funções são feitas ao executar a função <b>${target.procedure.id}</b>?"
+//            "How many function calls are made from executing function <b>${target.procedure.id}</b>?"
     }
 
     override fun answer(target: ProcedureData): Int {

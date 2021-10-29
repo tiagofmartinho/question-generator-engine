@@ -4,6 +4,8 @@ import com.google.googlejavaformat.java.Formatter
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import pt.iscte.questionengine.exceptions.DuplicateCodeSubmissionException
+import pt.iscte.questionengine.exceptions.InvalidCodeException
 import pt.iscte.questionengine.services.QuestionEngineService
 import pt.iscte.questionengine.models.AnswerInteraction
 import pt.iscte.questionengine.models.CodeSubmissionModel
@@ -21,7 +23,11 @@ class QuestionEngineController(val service: QuestionEngineService) {
         } catch (exception: Exception) {
             return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
-        return ResponseEntity.ok(service.getQuestions(codeSubmissionModel))
+        return try {
+            ResponseEntity.ok(service.getQuestions(codeSubmissionModel))
+        } catch (exception: DuplicateCodeSubmissionException) {
+            ResponseEntity(HttpStatus.CONFLICT)
+        }
     }
 
     @PostMapping("answer")

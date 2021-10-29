@@ -8,4 +8,6 @@ import pt.iscte.questionengine.entities.User
 interface UserRepository : CrudRepository<User, Long> {
 
     fun findUserByEmail(email: String): User?
+
+    fun findUserByStudentNumber(studentNumber: Int): User?
 }

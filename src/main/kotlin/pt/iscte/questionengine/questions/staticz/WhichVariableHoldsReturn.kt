@@ -5,8 +5,8 @@ import pt.iscte.questionengine.entities.ProficiencyLevel
 
 class WhichVariableHoldsReturn : ProcedureQuestion {
 
-   override fun question(target: IProcedure) = "Which variable will hold the return value of function ${target.id}?"
-    // override fun question(target: IProcedure) = "Que variável terá o valor de retorno da função <b>${target.id}</b>?"
+//   override fun question(target: IProcedure) = "Which variable will hold the return value of function ${target.id}?"
+     override fun question(target: IProcedure) = "Que variável terá o valor de retorno da função <b>${target.id}</b>?"
 
     override fun applicableTo(target: IProcedure): Boolean {
         if(target.returnType.isVoid)

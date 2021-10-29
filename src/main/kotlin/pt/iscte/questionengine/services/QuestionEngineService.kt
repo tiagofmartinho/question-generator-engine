@@ -12,7 +12,7 @@ import pt.iscte.questionengine.models.QuestionModel
 import pt.iscte.questionengine.repositories.AnswerSubmissionRepository
 import pt.iscte.questionengine.repositories.CodeSubmissionRepository
 import pt.iscte.questionengine.repositories.QuestionRepository
-import kotlin.streams.toList
+import pt.iscte.questionengine.entities.SubmissionCode
 
 @Service
 class QuestionEngineService(
@@ -58,7 +58,7 @@ class QuestionEngineService(
     }
 
     private fun saveCodeSubmission(code: String, user: User): CodeSubmission {
-        return codeSubmissionRepository.save(CodeSubmission(null, user, code, null))
+        return codeSubmissionRepository.save(CodeSubmission(null, user, code, null, SubmissionCode.S11))
     }
 
 }

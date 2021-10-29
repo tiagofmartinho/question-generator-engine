@@ -17,8 +17,8 @@ class WhatIsTheVariableRole: VariableQuestion {
     }
 
     override fun question(target: IVariableDeclaration) = 
-    // "Qual é o papel mais determinante da variável <b>${target.id}</b> da função <b>${target.ownerProcedure.id}</b>?"
-    "What is the most determinant role of variable <b>${target.id}</b> in function <b>${target.ownerProcedure.id}</b>?"
+     "Qual é o papel mais determinante da variável <b>${target.id}</b> da função <b>${target.ownerProcedure.id}</b>?"
+//    "What is the most determinant role of variable <b>${target.id}</b> in function <b>${target.ownerProcedure.id}</b>?"
 
 
     override fun answer(target: IVariableDeclaration): VariableRole {

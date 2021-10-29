@@ -12,12 +12,12 @@ class HowManyVariableAssignments: DynamicQuestion {
         val entry = target.elements.first { it.type == ElementType.VARIABLE_ASSIGNMENTS }.element as Map.Entry<*, *>
         return if (paramElements.isNotEmpty()) {
             val args = paramElements.map { it.element }
-//            "Quantas vezes é atribuído um valor à variável <b>${entry.key}</b> com a invocação <b>${target.procedure.signature(args)}</b>?"
-            "How many times a value is assigned to variable <b>${entry.key}</b> from the following invocation: <b>${target.procedure.signature(args)}</b>?"
+            "Quantas vezes é atribuído um valor à variável <b>${entry.key}</b> com a invocação <b>${target.procedure.signature(args)}</b>?"
+//            "How many times a value is assigned to variable <b>${entry.key}</b> from the following invocation: <b>${target.procedure.signature(args)}</b>?"
         }
         else
-//            "Quantas vezes é atribuído um valor à variável <b>${entry.key}</b> na função <b>${target.procedure.id}</b>?"
-            "How many times a value is assigned to variable <b>${entry.key}</b> from executing function <b>${target.procedure.id}</b>?"
+            "Quantas vezes é atribuído um valor à variável <b>${entry.key}</b> na função <b>${target.procedure.id}</b>?"
+//            "How many times a value is assigned to variable <b>${entry.key}</b> from executing function <b>${target.procedure.id}</b>?"
     }
 
     override fun answer(target: ProcedureData): Int {
