@@ -1,12 +1,11 @@
 package pt.iscte.questionengine.services
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import pt.iscte.questionengine.entities.AnswerSubmission
 import pt.iscte.questionengine.entities.ProficiencyLevel
-import pt.iscte.questionengine.entities.SubmissionCode
 import pt.iscte.questionengine.entities.User
 import pt.iscte.questionengine.exceptions.DuplicateCodeSubmissionException
-import pt.iscte.questionengine.exceptions.QuestionEngineException
 import pt.iscte.questionengine.models.UserModel
 import pt.iscte.questionengine.repositories.AnswerSubmissionRepository
 import pt.iscte.questionengine.repositories.UserRepository
@@ -15,6 +14,9 @@ import pt.iscte.questionengine.repositories.UserRepository
 class UserService(private val userRepository: UserRepository,
                   private val answerSubmissionRepository: AnswerSubmissionRepository,
                   private val proficiencyService: ProficiencyService) {
+
+    @Value("\${submission.code}")
+    lateinit var submissionCode: String
 
     fun updateUserProficiency(user: User) : User {
         val userAnswers = answerSubmissionRepository.findAnswerSubmissionsByUser(user)
@@ -34,7 +36,10 @@ class UserService(private val userRepository: UserRepository,
                 User(userModel.firstName, userModel.lastName, userModel.email, userModel.studentNumber, proficiencyService.getProficiency(
                     ProficiencyLevel.C))
             )
-        if (!student.codeSubmissions.isNullOrEmpty() && student.codeSubmissions!!.any { codeSubmission -> codeSubmission.submissionCode == SubmissionCode.S11 }) {
+
+        if (!student.codeSubmissions.isNullOrEmpty() &&
+            student.codeSubmissions!!.any { codeSubmission -> codeSubmission.submissionCode.toString() == submissionCode })
+        {
             throw DuplicateCodeSubmissionException()
         }
 

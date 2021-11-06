@@ -5,11 +5,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import pt.iscte.questionengine.exceptions.DuplicateCodeSubmissionException
-import pt.iscte.questionengine.exceptions.InvalidCodeException
-import pt.iscte.questionengine.services.QuestionEngineService
 import pt.iscte.questionengine.models.AnswerInteraction
 import pt.iscte.questionengine.models.CodeSubmissionModel
 import pt.iscte.questionengine.models.CodeSubmissionResponse
+import pt.iscte.questionengine.services.QuestionEngineService
 
 @CrossOrigin
 @RestController

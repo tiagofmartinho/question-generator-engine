@@ -39,3 +39,4 @@ out/
 .env
 /bd/
 /local.properties
+.DS_Store

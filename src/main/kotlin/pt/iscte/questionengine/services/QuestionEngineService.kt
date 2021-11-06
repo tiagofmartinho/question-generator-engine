@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pt.iscte.questionengine.entities.AnswerSubmission
 import pt.iscte.questionengine.entities.CodeSubmission
+import pt.iscte.questionengine.entities.SubmissionCode
 import pt.iscte.questionengine.entities.User
 import pt.iscte.questionengine.models.AnswerInteraction
 import pt.iscte.questionengine.models.CodeSubmissionModel
@@ -12,7 +13,6 @@ import pt.iscte.questionengine.models.QuestionModel
 import pt.iscte.questionengine.repositories.AnswerSubmissionRepository
 import pt.iscte.questionengine.repositories.CodeSubmissionRepository
 import pt.iscte.questionengine.repositories.QuestionRepository
-import pt.iscte.questionengine.entities.SubmissionCode
 import java.util.*
 import kotlin.streams.toList
 
