@@ -1,5 +1,6 @@
 package pt.iscte.questionengine.services
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pt.iscte.questionengine.entities.AnswerSubmission
@@ -26,6 +27,8 @@ class QuestionEngineService(
     private val questionGeneratorService: QuestionGeneratorService
 ) {
 
+    @Value("\${submission.code}")
+    lateinit var submissionCode: SubmissionCode
 
     @Transactional
     fun getQuestions(codeSubmissionModel: CodeSubmissionModel): CodeSubmissionResponse {
@@ -60,7 +63,7 @@ class QuestionEngineService(
     }
 
     private fun saveCodeSubmission(code: String, user: User): CodeSubmission {
-        return codeSubmissionRepository.save(CodeSubmission(null, user, code, null, SubmissionCode.S11))
+        return codeSubmissionRepository.save(CodeSubmission(null, user, code, null, submissionCode))
     }
 
 }
